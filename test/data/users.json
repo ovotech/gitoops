@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {
+      "login": "userA",
+      "url": "https://github.com/userA"
+    },
+    {
+      "login": "userB",
+      "url": "https://github.com/userB"
+    }
+  ],
+  "edges": [
+    {
+      "role": "MEMBER"
+    },
+    {
+      "role": "MEMBER"
+    }
+  ]
+}

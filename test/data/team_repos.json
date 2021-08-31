@@ -1,0 +1,20 @@
+{
+  "edges": [
+    {
+      "permission": "ADMIN"
+    },
+    {
+      "permission": "WRITE"
+    }
+  ],
+  "nodes": [
+    {
+      "url": "https://github.com/fakenews/repoa1",
+	  "name": "repoA1"
+    },
+    {
+      "url": "https://github.com/fakenews/repoa2",
+	  "name": "repoA2"
+    }
+  ]
+}

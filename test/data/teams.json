@@ -1,0 +1,18 @@
+{
+  "edges": [
+    {
+      "node": {
+        "name": "Team A",
+        "url": "https://github.com/orgs/fakenews/teams/teama",
+        "slug": "teama"
+      }
+    },
+    {
+      "node": {
+        "name": "Team B",
+        "url": "https://github.com/orgs/fakenews/teams/teamb",
+        "slug": "teamb"
+      }
+    }
+  ]
+}

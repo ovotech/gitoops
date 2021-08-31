@@ -1,0 +1,103 @@
+{
+    "nodes": [
+      {
+        "url": "https://github.com/fakenews/repoa1",
+        "name": "repoA1",
+        "isPrivate": true,
+        "isArchived": false,
+        "owner": {
+          "login": "ovotech",
+          "__typename": "Organization"
+        },
+        "collaborators": {
+          "edges": [
+            {
+              "permission": "ADMIN"
+            }
+          ],
+          "nodes": [
+            {
+              "url": "https://github.com/collaboratora1",
+              "login": "collaboratora1"
+            }
+          ]
+        },
+        "circleci": {
+          "__typename": "Blob",
+          "text": "foobar"
+        },
+        "travis": null,
+        "jenkins": null,
+        "codebuild": null,
+        "cloudbuild": null,
+        "buildsbt": null,
+        "actions": {
+          "entries": [
+            {
+              "name": "foo.yaml",
+              "object": {
+                "text": "foobar"
+              }
+            }
+          ]
+        },
+        "branchProtectionRules": {
+          "nodes": [
+            {
+              "pattern": "master",
+              "requiresApprovingReviews": true
+            }
+          ]
+        },
+        "pullRequests": {
+          "nodes": [
+            {
+              "commits": {
+                "nodes": [
+                  {
+                    "commit": {
+                      "status": {
+                        "contexts": [
+                          {
+                            "targetUrl": "https://app.snyk.io/blah",
+                            "description": "No license issues in 2 tests",
+                            "context": "license/snyk (Team A)"
+                          },
+                          {
+                            "targetUrl": "https://circleci.com/blah",
+                            "description": "Your tests failed on CircleCI",
+                            "context": "ci/circleci: Build Error"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "defaultBranchRef": {
+          "target": {
+            "history": {
+              "edges": [
+                {
+                  "node": {
+                    "status": {
+                      "contexts": [
+                        {
+                          "context": "ci/circleci: Build Error",
+                          "targetUrl": "https://circleci.com/blah",
+                          "description": "Your tests failed on CircleCI"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
