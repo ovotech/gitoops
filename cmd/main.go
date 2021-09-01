@@ -9,7 +9,6 @@ import (
 
 	"github.com/ovotech/gitoops/pkg/database"
 	"github.com/ovotech/gitoops/pkg/enrich"
-	"github.com/ovotech/gitoops/pkg/github"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -20,9 +19,9 @@ var (
 	neo4jURI      string
 	neo4jUser     string
 	neo4jPassword string
-	githubToken   string
 
 	githubCmd       = flag.NewFlagSet("github", flag.ExitOnError)
+	githubToken     = githubCmd.String("token", "", "The GitHub access token.")
 	githubIngestors arrayFlags
 
 	circleCICmd    = flag.NewFlagSet("circleci", flag.ExitOnError)
@@ -58,32 +57,7 @@ func main() {
 	switch cmd.Name() {
 
 	case githubCmd.Name():
-		setupCommonFlags()
-		// Since we want to support a list this has to be defined here, because Golang's `flag`
-		// sucks (or more likely, I don't understand how to use it)
-		githubCmd.Var(
-			&githubIngestors,
-			"ingestor",
-			"Ingestors to call. Supports: Organizations, Teams, Users, Repos, TeamRepos, "+
-				"TeamMembers, Default (all previous), RepoWebhooks. May be used multiple times.",
-		)
-		// Parse arguments
-		cmd.Parse(os.Args[2:])
-		validateCommonParams()
-		initLogging()
-
-		// Parse user submitted topics into a list of topics to ingest
-		ingestorNames, err := resolveIngestorNames(githubIngestors)
-		if err != nil {
-			log.Fatalf("Error parsing topics: %s", err)
-		}
-
-		// Set up DB
-		db := database.GetDB(neo4jURI, neo4jUser, neo4jPassword)
-
-		// Now we can actually call the ingestor
-		gh := github.GetGitHub(db, githubToken, organization)
-		gh.SyncByIngestorNames(ingestorNames)
+		cmdGitHub(cmd)
 
 	case circleCICmd.Name():
 		cmdCircleCI(cmd)
@@ -134,7 +108,6 @@ func setupCommonFlags() {
 		fs.StringVar(&neo4jURI, "neo4j-uri", "neo4j://localhost:7687", "The Neo4j URI.")
 		fs.StringVar(&neo4jUser, "neo4j-user", "neo4j", "The Neo4j user.")
 		fs.StringVar(&neo4jPassword, "neo4j-password", "", "The Neo4j password.")
-		fs.StringVar(&githubToken, "github-token", "", "The GitHub API token.")
 		fs.BoolVar(&debug, "debug", false, "Enable debug logging.")
 	}
 }
@@ -144,7 +117,6 @@ func validateCommonParams() {
 	requiredFlags := map[string]string{
 		organization:  "-organization",
 		neo4jPassword: "-neo4j-password",
-		githubToken:   "-github-token",
 	}
 
 	for k, v := range requiredFlags {

@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"log"
+
 	"os"
 
 	"github.com/ovotech/gitoops/pkg/circleci"
 	"github.com/ovotech/gitoops/pkg/database"
+	log "github.com/sirupsen/logrus"
 )
 
 func cmdCircleCI(cmd *flag.FlagSet) {
@@ -16,8 +17,9 @@ func cmdCircleCI(cmd *flag.FlagSet) {
 	cmd.Parse(os.Args[2:])
 	validateCommonParams()
 	initLogging()
-
 	validateCircleCIParams()
+
+	log.Infof("Running CircleCI ingestors")
 
 	db := database.GetDB(neo4jURI, neo4jUser, neo4jPassword)
 
