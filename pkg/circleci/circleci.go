@@ -86,6 +86,7 @@ func (cci *CircleCI) Sync() {
 	for repoRecords.Next() {
 		repoName, _ := repoRecords.Record().Get("repoName")
 
+		log.Infof("Running ProjectIngestor on repo %s", repoName)
 		pi := ProjectIngestor{
 			restclient:   cci.restclient,
 			db:           cci.db,
@@ -105,6 +106,7 @@ func (cci *CircleCI) Sync() {
 	for projectRecords.Next() {
 		projectName, _ := projectRecords.Record().Get("projectName")
 
+		log.Infof("Running ProjectEnvVarsIngestor on projet %s", projectName)
 		pevi := ProjectEnvVarsIngestor{
 			restclient:   cci.restclient,
 			db:           cci.db,
