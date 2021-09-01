@@ -93,7 +93,8 @@ func (ing *ContextsIngestor) insertTeamsContexts() {
 
 	MERGE (c:CircleCIContext{id: context.id})
 
-	SET c.name = context.name
+	SET c.name = context.name,
+	c.all_members = false
 
 	WITH c, context
 	MATCH (t:Team{name: context.team})
@@ -124,7 +125,8 @@ func (ing *ContextsIngestor) insertAllMembersContexts() {
 
 	MERGE (c:CircleCIContext{id: context.id})
 
-	SET c.name = context.name
+	SET c.name = context.name,
+	c.all_members = true
 
 	WITH c, context
 	MATCH (u:User)
