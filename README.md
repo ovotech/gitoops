@@ -12,7 +12,9 @@ _This project is still in early stages and substantial changes to the codebase a
 
 ## Supported CI/CD Systems
 
-GitOops currently extracts relationships between GitHub users, teams and their repositories and secrets stored in the following CI/CD systems:
+In addition to mapping relationships between your users, teams and repositories, GitOops maps relationships between those and environment variables in your CI/CD systems.
+
+The following CI/CD systems are currently supported:
 
 - GitHub Actions (soon)
 - CircleCI
