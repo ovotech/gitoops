@@ -1,6 +1,6 @@
 # GitOops! 😱
 
-GitOops is a tool that help attackers and defenders identify lateral movement and privilege escalation opportunities in GitHub organizations by abusing CI/CD pipelines and GitHub access controls.
+GitOops is a tool that helps attackers and defenders identify lateral movement and privilege escalation opportunities in GitHub organizations by abusing CI/CD pipelines and GitHub access controls.
 
 It works by ingesting security-relevant information about your GitHub organization and your CI/CD systems into a Bolt-compatible graph database, allowing you the query attack paths with openCypher.
 
