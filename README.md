@@ -68,6 +68,8 @@ RETURN p
 
 - Show me repositories that many users have access to with potentially interesting secrets exposed in a pull request's CI/CD context
 
+Here we're using the content of CI/CD configuration files to make educated guesses about interesting pipelines. This is less accurate that using our other relationships, but gives us coverage of unsupported CI/CD systems (as long as we pulled the configuration files).
+
 ```
 MATCH (r:Repository)-[HAS_CI_CONFIGURATION]->(f:File{path: ".circleci/config.yml"})
 WHERE any(x IN f.env WHERE x =~ ".*(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD).*")
