@@ -121,7 +121,7 @@ $ go run . github -debug -organization fakenews -neo4j-password $NEO4J_PASSWORD 
 
 ### Ingest CircleCI data
 
-Unfortunately, the documented CircleCI REST API doesn't give everything we want. Luckily there's a "hidden" GraphQL API we can access with a cookie. With your browser, navigate to the CircleCI web UI and fetch your `ring-session` cookie:
+Unfortunately, the documented CircleCI REST API doesn't give everything we want. Luckily there's a "hidden" GraphQL API we can access with a cookie. With your browser, navigate to the CircleCI web UI and fetch your `ring-session` cookie. You should be able to find this in a request to the `graphql-unstable` endpoint when loading some pages.
 
 ```
 $ export CIRCLECI_COOKIE=bla
