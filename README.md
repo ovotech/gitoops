@@ -19,7 +19,9 @@ The following CI/CD systems are currently supported:
 - GitHub Actions (soon)
 - CircleCI
 
-GitOops also ingests CI/CD configuration files from repositories for all popular CI/CD systems, allowing coarse queries for other CI/CD systems.
+On top of this, we ingest CI/CD configuration files from repositories for all popular CI/CD systems, allowing coarse queries on the configuration of pipelines for other CI/CD systems.
+
+Finally, GitOops will also map status checks from commits to a repository's pull requests and default branch, allowing you to find integrations that are typically configured server-side (e.g. AWS CodeBuild).
 
 ## Examples
 
@@ -42,7 +44,7 @@ RETURN r.name
 
 - Show me repositories running production `terraform plan` on pull requests
 
-Production Terraform plans on unreviewed code are [a bad idea](https://alex.kaskaso.li/post/terraform-plan-rce). We attempt to find these by looking at the context values on pull requests' status checks.
+Production Terraform plans on unreviewed code are [a bad idea](https://alex.kaskaso.li/post/terraform-plan-rce). We attempt to find these by looking at the context values on pull requests' status checks, to get maximum coverage and account for CI/CD systems that may be configured server-side (e.g. AWS CodeBuild).
 
 ```
 MATCH (r:Repository)-[:HAS_STATUS_CHECK{pull_request:TRUE}]->(s:StatusCheck)
