@@ -45,10 +45,30 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	// nb: order matters for these!
 	orgIngestorOrderedKeys := []string{"organizations", "teams", "users", "repos"}
 	orgIngestors := map[string]Ingestor{
-		"organizations": &OrganizationsIngestor{gqlclient: g.gqlclient, db: g.db},
-		"teams":         &TeamsIngestor{gqlclient: g.gqlclient, db: g.db},
-		"users":         &UsersIngestor{gqlclient: g.gqlclient, db: g.db},
-		"repos":         &ReposIngestor{gqlclient: g.gqlclient, db: g.db},
+		"organizations": &OrganizationsIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &OrganizationsData{},
+			session:   g.session,
+		},
+		"teams": &TeamsIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &TeamsData{},
+			session:   g.session,
+		},
+		"users": &UsersIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &UsersData{},
+			session:   g.session,
+		},
+		"repos": &ReposIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &ReposData{},
+			session:   g.session,
+		},
 	}
 
 	for _, name := range orgIngestorOrderedKeys {
@@ -68,12 +88,16 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			"teamrepos": &TeamReposIngestor{
 				gqlclient: g.gqlclient,
 				db:        g.db,
+				data:      &TeamReposData{},
 				teamSlug:  teamSlug.(string),
+				session:   g.session,
 			},
 			"teammembers": &TeamMembersIngestor{
 				gqlclient: g.gqlclient,
 				db:        g.db,
+				data:      &TeamMembersData{},
 				teamSlug:  teamSlug.(string),
+				session:   g.session,
 			},
 		}
 
@@ -99,6 +123,7 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 				restclient: g.restclient,
 				db:         g.db,
 				repoName:   repoName.(string),
+				session:    g.session,
 			},
 		}
 
