@@ -13,6 +13,7 @@ type ReposIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *ReposData
+	session   string
 }
 
 type ReposData struct {

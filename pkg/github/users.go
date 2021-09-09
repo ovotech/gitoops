@@ -10,6 +10,7 @@ type UsersIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *UsersData
+	session   string
 }
 
 type UsersData struct {

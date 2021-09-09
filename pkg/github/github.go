@@ -11,9 +11,10 @@ type GitHub struct {
 	gqlclient  *GraphQLClient
 	restclient *RESTClient
 	db         *database.Database
+	session    string
 }
 
-func GetGitHub(db *database.Database, token, organization string) *GitHub {
+func GetGitHub(db *database.Database, token, organization, session string) *GitHub {
 	return &GitHub{
 		gqlclient: &GraphQLClient{
 			client:       &http.Client{},
@@ -25,7 +26,8 @@ func GetGitHub(db *database.Database, token, organization string) *GitHub {
 			token:        token,
 			organization: organization,
 		},
-		db: db,
+		db:      db,
+		session: session,
 	}
 }
 

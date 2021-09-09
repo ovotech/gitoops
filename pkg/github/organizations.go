@@ -10,6 +10,7 @@ type OrganizationsIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *OrganizationsData
+	session   string
 }
 
 type OrganizationsData struct {

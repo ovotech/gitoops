@@ -10,6 +10,7 @@ type TeamsIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *TeamsData
+	session   string
 }
 
 type TeamsData struct {

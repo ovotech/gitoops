@@ -11,6 +11,7 @@ type TeamReposIngestor struct {
 	db        *database.Database
 	data      *TeamReposData
 	teamSlug  string
+	session   string
 }
 
 type TeamReposData struct {

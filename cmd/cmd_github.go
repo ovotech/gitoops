@@ -38,7 +38,7 @@ func cmdGitHub(cmd *flag.FlagSet) {
 	db := database.GetDB(neo4jURI, neo4jUser, neo4jPassword)
 
 	// Now we can actually call the ingestor
-	gh := github.GetGitHub(db, *githubToken, organization)
+	gh := github.GetGitHub(db, *githubToken, organization, session)
 	gh.SyncByIngestorNames(ingestorNames)
 }
 

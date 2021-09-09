@@ -13,6 +13,7 @@ type TeamMembersIngestor struct {
 	db        *database.Database
 	data      *TeamMembersData
 	teamSlug  string
+	session   string
 }
 
 type TeamMembersData struct {

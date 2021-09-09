@@ -14,6 +14,7 @@ type RepoWebhooksIngestor struct {
 	db         *database.Database
 	data       *RepoWebhooksData
 	repoName   string
+	session    string
 }
 
 type RepoWebhooksData []struct {
