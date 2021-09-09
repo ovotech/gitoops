@@ -113,7 +113,7 @@ func setupCommonFlags() {
 			&session,
 			"session",
 			"",
-			"A session ID for this run. This will be set or updated on nodes and relationships that are present during this run, allowing us to remove nodes and relationships that are no longer present during a cleanup step.",
+			"A session ID for this run. This will be set or updated on nodes and relationships that are present during this run, allowing us to remove nodes and relationships that no longer exist.",
 		)
 		fs.BoolVar(&debug, "debug", false, "Enable debug logging.")
 	}
