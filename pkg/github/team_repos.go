@@ -23,7 +23,12 @@ type TeamReposData struct {
 	} `json:"nodes"`
 }
 
-func (ing *TeamReposIngestor) FetchData() {
+func (ing *TeamReposIngestor) Sync() {
+	ing.fetchData()
+	ing.insertTeamRepos()
+}
+
+func (ing *TeamReposIngestor) fetchData() {
 	query := `
 	query($login: String!, $teamSlug: String!, $cursor: String)  {
 		organization(login: $login) {
@@ -53,10 +58,6 @@ func (ing *TeamReposIngestor) FetchData() {
 	)
 
 	json.Unmarshal(data, &ing.data)
-}
-
-func (ing *TeamReposIngestor) Sync() {
-	ing.insertTeamRepos()
 }
 
 func (ing *TeamReposIngestor) insertTeamRepos() {

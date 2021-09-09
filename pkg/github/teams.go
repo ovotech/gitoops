@@ -22,7 +22,12 @@ type TeamsData struct {
 	} `json:"edges"`
 }
 
-func (ing *TeamsIngestor) FetchData() {
+func (ing *TeamsIngestor) Sync() {
+	ing.fetchData()
+	ing.insertTeams()
+}
+
+func (ing *TeamsIngestor) fetchData() {
 	query := `
 	query($login: String!, $cursor: String) {
 		organization(login: $login) {
@@ -61,10 +66,6 @@ func (ing *TeamsIngestor) FetchData() {
 	)
 
 	json.Unmarshal(data, &ing.data)
-}
-
-func (ing *TeamsIngestor) Sync() {
-	ing.insertTeams()
 }
 
 func (ing *TeamsIngestor) insertTeams() {
