@@ -99,7 +99,17 @@ type ReposData struct {
 	} `json:"nodes"`
 }
 
-func (ing *ReposIngestor) FetchData() {
+func (ing *ReposIngestor) Sync() {
+	ing.fetchData()
+	ing.insertRepos()
+	ing.insertReposFiles()
+	ing.insertReposCollaborators()
+	ing.insertReposPullRequestsStatusChecks()
+	ing.insertReposDefaultBranchStatusChecks()
+	ing.insertReposBranchProtectionRules()
+}
+
+func (ing *ReposIngestor) fetchData() {
 	query := `
 	query($login: String!, $cursor: String) {
 		organization(login: $login) {
@@ -219,15 +229,6 @@ func (ing *ReposIngestor) FetchData() {
 	)
 
 	json.Unmarshal(data, &ing.data)
-}
-
-func (ing *ReposIngestor) Sync() {
-	ing.insertRepos()
-	ing.insertReposFiles()
-	ing.insertReposCollaborators()
-	ing.insertReposPullRequestsStatusChecks()
-	ing.insertReposDefaultBranchStatusChecks()
-	ing.insertReposBranchProtectionRules()
 }
 
 func (ing *ReposIngestor) insertRepos() {

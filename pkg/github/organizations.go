@@ -19,7 +19,12 @@ type OrganizationsData struct {
 	} `json:"nodes"`
 }
 
-func (ing *OrganizationsIngestor) FetchData() {
+func (ing *OrganizationsIngestor) Sync() {
+	ing.fetchData()
+	ing.insertOrganizations()
+}
+
+func (ing *OrganizationsIngestor) fetchData() {
 	ing.data = &OrganizationsData{
 		Nodes: []struct {
 			Login string "json:\"login\""
@@ -31,10 +36,6 @@ func (ing *OrganizationsIngestor) FetchData() {
 			},
 		},
 	}
-}
-
-func (ing *OrganizationsIngestor) Sync() {
-	ing.insertOrganizations()
 }
 
 func (ing *OrganizationsIngestor) insertOrganizations() {

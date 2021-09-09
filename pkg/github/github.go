@@ -48,7 +48,6 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			continue
 		}
 		log.Infof("Running org ingestor %s", name)
-		orgIngestors[name].FetchData()
 		orgIngestors[name].Sync()
 	}
 
@@ -75,7 +74,6 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 				continue
 			}
 			log.Infof("Running team ingestor %s on team %s", name, teamSlug)
-			ingestor.FetchData()
 			ingestor.Sync()
 		}
 	}
@@ -101,7 +99,6 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 				continue
 			}
 			log.Infof("Running repo ingestor %s on repo %s", name, repoName)
-			ingestor.FetchData()
 			ingestor.Sync()
 		}
 	}

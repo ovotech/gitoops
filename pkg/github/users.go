@@ -22,7 +22,12 @@ type UsersData struct {
 	} `json:"nodes"`
 }
 
-func (ing *UsersIngestor) FetchData() {
+func (ing *UsersIngestor) Sync() {
+	ing.fetchData()
+	ing.insertUsers()
+}
+
+func (ing *UsersIngestor) fetchData() {
 	query := `
 	query($login: String!, $cursor: String) {
 		organization(login: $login) {
@@ -50,10 +55,6 @@ func (ing *UsersIngestor) FetchData() {
 	)
 
 	json.Unmarshal(data, &ing.data)
-}
-
-func (ing *UsersIngestor) Sync() {
-	ing.insertUsers()
 }
 
 func (ing *UsersIngestor) insertUsers() {

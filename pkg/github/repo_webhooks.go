@@ -41,15 +41,16 @@ type RepoWebhooksData []struct {
 	URL       string    `json:"url"`
 }
 
-func (ing *RepoWebhooksIngestor) FetchData() {
+func (ing *RepoWebhooksIngestor) Sync() {
+	ing.fetchData()
+	ing.insertRepoWebhooks()
+}
+
+func (ing *RepoWebhooksIngestor) fetchData() {
 	query := fmt.Sprintf("repos/%s/%s/hooks", ing.restclient.organization, ing.repoName)
 
 	data := ing.restclient.fetch(query)
 	json.Unmarshal(data, &ing.data)
-}
-
-func (ing *RepoWebhooksIngestor) Sync() {
-	ing.insertRepoWebhooks()
 }
 
 func (ing *RepoWebhooksIngestor) insertRepoWebhooks() {
