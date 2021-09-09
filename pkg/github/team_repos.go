@@ -80,11 +80,13 @@ func (ing *TeamReposIngestor) insertTeamRepos() {
 	MERGE (r:Repository{id: repo.url})
 
 	SET r.url = repo.url,
-	r.name = repo.name
+	r.name = repo.name,
+	r.session = $session
 
 	WITH r, repo
 
 	MATCH (t:Team{slug: repo.teamSlug})
 	MERGE (t)-[rel:HAS_PERMISSION_ON{permission: repo.permission}]->(r)
-	`, map[string]interface{}{"repos": repos})
+	SET rel.session = $session
+	`, map[string]interface{}{"repos": repos, "session": ing.session})
 }
