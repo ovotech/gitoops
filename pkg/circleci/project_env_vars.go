@@ -41,9 +41,10 @@ func (ing *ProjectEnvVarsIngestor) insertProjectEnvVars() {
 	for _, item := range ing.data.Items {
 		id := fmt.Sprintf("%x", md5.Sum([]byte(ing.projectName+item.Name)))
 		envVars = append(envVars, map[string]interface{}{
-			"id":        id,
-			"projectId": ing.projectName,
-			"variable":  item.Name,
+			"id":             id,
+			"projectId":      ing.projectName,
+			"variable":       item.Name,
+			"truncatedValue": item.Value[len(item.Value)-4:],
 		})
 	}
 

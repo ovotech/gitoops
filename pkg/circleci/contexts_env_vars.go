@@ -18,7 +18,8 @@ type ContextEnVarsIngestor struct {
 type ContextEnvVarsData struct {
 	Id        string `json:"id"`
 	Resources []struct {
-		Variable string `json:"variable"`
+		Variable       string `json:"variable"`
+		TruncatedValue string `json:"truncatedValue"`
 	} `json:"resources"`
 }
 
@@ -29,6 +30,7 @@ func (ing *ContextEnVarsIngestor) fetchData() {
 			id
 			resources {
 				variable
+				truncatedValue
 			}
 		}
 	}	  
@@ -54,9 +56,10 @@ func (ing *ContextEnVarsIngestor) insertContextsEnvVars() {
 	for _, resource := range ing.data.Resources {
 		id := fmt.Sprintf("%x", md5.Sum([]byte(ing.data.Id+resource.Variable)))
 		envVars = append(envVars, map[string]interface{}{
-			"id":        id,
-			"contextId": ing.data.Id,
-			"variable":  resource.Variable,
+			"id":             id,
+			"contextId":      ing.data.Id,
+			"variable":       resource.Variable,
+			"truncatedValue": resource.TruncatedValue,
 		})
 	}
 
@@ -65,7 +68,8 @@ func (ing *ContextEnVarsIngestor) insertContextsEnvVars() {
 
 	MERGE (v:EnvironmentVariable{id: envVar.id})
 
-	SET v.variable = envVar.variable
+	SET v.variable = envVar.variable,
+	v.truncatedValue = envVar.truncatedValue
 
 	WITH v, envVar
 	MATCH (c:CircleCIContext{id: envVar.contextId})
