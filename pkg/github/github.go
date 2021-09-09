@@ -29,6 +29,12 @@ func GetGitHub(db *database.Database, token, organization string) *GitHub {
 	}
 }
 
+// Sync with default ingestors.
+func (g *GitHub) Sync() {
+	ingestors := []string{"organizations", "teams", "users", "repos", "teamrepos", "teammembers"}
+	g.SyncByIngestorNames(ingestors)
+}
+
 // Takes a slice of ingestor names and calls those in the right order.
 func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	log.Infof("Syncing with these ingestors: %s", targetIngestors)
