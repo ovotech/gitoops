@@ -55,6 +55,7 @@ func (ing *OrganizationsIngestor) insertOrganizations() {
 	MERGE (o:Organization{id: organization.url})
 
 	SET o.login = organization.login,
-	o.url = organization.url
-	`, map[string]interface{}{"organizations": organizations})
+	o.url = organization.url,
+	o.session = $session
+	`, map[string]interface{}{"organizations": organizations, "session": ing.session})
 }
