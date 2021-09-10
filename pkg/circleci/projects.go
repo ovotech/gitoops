@@ -68,7 +68,7 @@ func (ing *ProjectIngestor) insertProject() {
 	ing.db.Run(`
 	MERGE (p:CircleCIProject{id: $repoName})
 
-	SET p.repository = $repoName
+	SET p.repository = $repoName,
 	p.session = $session
 
 	WITH p, $repoName as repoName
