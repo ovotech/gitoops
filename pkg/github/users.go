@@ -10,6 +10,7 @@ type UsersIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *UsersData
+	session   string
 }
 
 type UsersData struct {
@@ -75,11 +76,13 @@ func (ing *UsersIngestor) insertUsers() {
 
 	MERGE (u:User{id: user.url})
 
-	SET u.login = user.login
+	SET u.login = user.login,
+	u.session = $session
 
 	WITH u, user
 
 	MATCH (o:Organization{login: user.organization})
-	MERGE (u)-[r:IS_MEMBER_OF{role: user.role}]->(o)
-	`, map[string]interface{}{"users": users})
+	MERGE (u)-[rel:IS_MEMBER_OF{role: user.role}]->(o)
+	SET rel.session = $session
+	`, map[string]interface{}{"users": users, "session": ing.session})
 }

@@ -13,6 +13,7 @@ type ReposIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *ReposData
+	session   string
 }
 
 type ReposData struct {
@@ -252,13 +253,15 @@ func (ing *ReposIngestor) insertRepos() {
 	SET r.url = repo.url,
 	r.name = repo.name,
 	r.isPrivate = repo.isPrivate,
-	r.isArchived = repo.isArchived
+	r.isArchived = repo.isArchived,
+	r.session = $session
 
 	WITH r, repo
 
 	MATCH (o:Organization{login: repo.organization})
 	MERGE (r)-[rel:OWNED_BY]->(o)
-	`, map[string]interface{}{"repos": repos})
+	SET rel.session = $session
+	`, map[string]interface{}{"repos": repos, "session": ing.session})
 }
 
 func (ing *ReposIngestor) insertReposCollaborators() {
@@ -281,13 +284,15 @@ func (ing *ReposIngestor) insertReposCollaborators() {
 
 	MERGE (u:User{id: repoCollaborator.url})
 
-	SET u.login = repoCollaborator.login
+	SET u.login = repoCollaborator.login,
+	u.session = $session
 
 	WITH u, repoCollaborator
 
 	MATCH (r:Repository{id: repoCollaborator.repoID})
 	MERGE (u)-[rel:HAS_PERMISSION_ON{permission: repoCollaborator.permission}]->(r)
-	`, map[string]interface{}{"reposCollaborators": reposCollaborators})
+	SET rel.session = $session
+	`, map[string]interface{}{"reposCollaborators": reposCollaborators, "session": ing.session})
 }
 
 func (ing *ReposIngestor) insertReposFiles() {
@@ -367,13 +372,15 @@ func (ing *ReposIngestor) insertReposFiles() {
 	MERGE (f:File{id: repoFile.id})
 
 	SET f.path = repoFile.path,
-	f.text = repoFile.text
+	f.text = repoFile.text,
+	f.session = $session
 
 	WITH f, repoFile
 
 	MATCH (r:Repository{id: repoFile.repoID})
 	MERGE (r)-[rel:HAS_CI_CONFIGURATION_FILE]->(f)
-	`, map[string]interface{}{"reposFiles": reposFiles})
+	SET rel.session = $session
+	`, map[string]interface{}{"reposFiles": reposFiles, "session": ing.session})
 }
 
 func (ing *ReposIngestor) insertReposPullRequestsStatusChecks() {
@@ -411,13 +418,15 @@ func (ing *ReposIngestor) insertReposPullRequestsStatusChecks() {
 	MERGE (s:StatusCheck{id: repoStatusCheck.id})
 
 	SET s.context = repoStatusCheck.context,
-	s.host = repoStatusCheck.host
+	s.host = repoStatusCheck.host,
+	s.session = $session
 
 	WITH s, repoStatusCheck
 
 	MATCH (r:Repository{id: repoStatusCheck.repoID})
 	MERGE (r)-[rel:HAS_STATUS_CHECK{pull_request: true}]->(s)
-	`, map[string]interface{}{"reposStatusChecks": reposStatusChecks})
+	SET rel.session = $session
+	`, map[string]interface{}{"reposStatusChecks": reposStatusChecks, "session": ing.session})
 }
 
 func (ing *ReposIngestor) insertReposDefaultBranchStatusChecks() {
@@ -446,13 +455,15 @@ func (ing *ReposIngestor) insertReposDefaultBranchStatusChecks() {
 	MERGE (s:StatusCheck{id: repoStatusCheck.id})
 
 	SET s.context = repoStatusCheck.context,
-	s.host = repoStatusCheck.host
+	s.host = repoStatusCheck.host,
+	s.session = $session
 
 	WITH s, repoStatusCheck
 
 	MATCH (r:Repository{id: repoStatusCheck.repoID})
 	MERGE (r)-[rel:HAS_STATUS_CHECK{default_branch: true}]->(s)
-	`, map[string]interface{}{"reposStatusChecks": reposStatusChecks})
+	SET rel.session = $session
+	`, map[string]interface{}{"reposStatusChecks": reposStatusChecks, "session": ing.session})
 }
 
 func (ing *ReposIngestor) insertReposBranchProtectionRules() {
@@ -480,10 +491,12 @@ func (ing *ReposIngestor) insertReposBranchProtectionRules() {
 	MERGE (b:BranchProtectionRule{id: rule.id})
 
 	SET b.pattern = rule.pattern,
-	b.requiresReviews = rule.requiresReviews
+	b.requiresReviews = rule.requiresReviews,
+	b.session = $session
 
 	WITH b, rule
 	MATCH (r:Repository{id: rule.repoID})
 	MERGE (r)-[rel:HAS_BRANCH_PROTECTION_RULE]->(b)
-	`, map[string]interface{}{"reposBranchProtectionRules": reposBranchProtectionRules})
+	SET rel.session = $session
+	`, map[string]interface{}{"reposBranchProtectionRules": reposBranchProtectionRules, "session": ing.session})
 }

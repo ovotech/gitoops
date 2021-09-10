@@ -15,6 +15,7 @@ type ProjectIngestor struct {
 	data         *ProjectData
 	organization string
 	repoName     string
+	session      string
 }
 
 type ProjectData struct {
@@ -67,11 +68,13 @@ func (ing *ProjectIngestor) insertProject() {
 	ing.db.Run(`
 	MERGE (p:CircleCIProject{id: $repoName})
 
-	SET p.repository = $repoName
+	SET p.repository = $repoName,
+	p.session = $session
 
 	WITH p, $repoName as repoName
 
 	MATCH (r:Repository{name: $repoName})
 	MERGE (r)-[rel:HAS_CI]->(p)
-	`, map[string]interface{}{"repoName": ing.repoName})
+	SET rel.session = $session
+	`, map[string]interface{}{"repoName": ing.repoName, "session": ing.session})
 }

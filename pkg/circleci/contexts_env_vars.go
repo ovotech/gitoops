@@ -13,6 +13,7 @@ type ContextEnVarsIngestor struct {
 	db        *database.Database
 	data      *ContextEnvVarsData
 	contextId string
+	session   string
 }
 
 type ContextEnvVarsData struct {
@@ -69,10 +70,12 @@ func (ing *ContextEnVarsIngestor) insertContextsEnvVars() {
 	MERGE (v:EnvironmentVariable{id: envVar.id})
 
 	SET v.variable = envVar.variable,
-	v.truncatedValue = envVar.truncatedValue
+	v.truncatedValue = envVar.truncatedValue,
+	v.session = $session
 
 	WITH v, envVar
 	MATCH (c:CircleCIContext{id: envVar.contextId})
 	MERGE (c)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
-	`, map[string]interface{}{"envVars": envVars})
+	SET rel.session = $session
+	`, map[string]interface{}{"envVars": envVars, "session": ing.session})
 }

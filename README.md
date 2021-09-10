@@ -116,22 +116,37 @@ MATCH p=(t:Team)-[:HAS_PERMISSION_ON]->(r:Repository{isArchived:FALSE})-[:HAS_CI
 RETURN p
 ```
 
-## Run
+## CLI
 
 ### Ingest GitHub data
 
 ```
 $ cd cmd/
-$ go run . github -debug -organization fakenews -neo4j-password $NEO4J_PASSWORD -token $GITHUB_TOKEN -ingestor default -neo4j-uri="neo4j://localhost:7687"
+$ go run . github								\
+		   -debug								\
+		   -organization fakenews				\
+		   -neo4j-password $NEO4J_PASSWORD		\
+		   -neo4j-uri="neo4j://localhost:7687"	\
+		   -token $GITHUB_TOKEN					\
+		   -ingestor default					\
+		   -session helloworld
 ```
+
+Most parameters should be self-explanatory. Note that the `session` is just a unique identifier for this run of the ingestor. You can use this to remove old nodes and relationships that are no longer relevant (by removing any nodes and relationships that don't have the latest session identifier from your database).
 
 ### Ingest CircleCI data
 
 Unfortunately, the documented CircleCI REST API doesn't give everything we want. Luckily there's a "hidden" GraphQL API we can access with a cookie. With your browser, navigate to the CircleCI web UI and fetch your `ring-session` cookie. You should be able to find this in a request to the `graphql-unstable` endpoint when loading some pages.
 
 ```
-$ export CIRCLECI_COOKIE=bla
- go run . circleci -debug -organization fakenews -neo4j-password $NEO4J_PASSWORD -neo4j-uri="neo4j://localhost:7687" -cookie=$CIRCLECI_COOKIE
+$ export CIRCLECI_COOKIE=RING_SESSION_COOKIE_VALUE
+$ go run . circleci								\
+		   -debug								\
+		   -organization fakenews				\
+		   -neo4j-password $NEO4J_PASSWORD		\
+		   -neo4j-uri="neo4j://localhost:7687"	\
+		   -cookie=$CIRCLECI_COOKIE				\
+		   -session helloworld
 ```
 
 ### Data enrichment
@@ -139,5 +154,10 @@ $ export CIRCLECI_COOKIE=bla
 We do some very crude "enriching" of data. After you've ingested GitHub proceed to:
 
 ```
-$ go run . enrich -debug -organization fakenews -neo4j-password $NEO4J_PASSWORD
+$ go run . enrich 								\
+		   -debug								\
+		   -organization fakenews				\
+		   -session helloworld					\
+		   -neo4j-password $NEO4J_PASSWORD		\
+		   -neo4j-uri="neo4j://localhost:7687"
 ```
