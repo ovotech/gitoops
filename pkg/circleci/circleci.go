@@ -100,7 +100,6 @@ func (cci *CircleCI) Sync() {
 			repoName:     repoName.(string),
 			session:      cci.session,
 		}
-
 		pi.Sync()
 	}
 
@@ -121,7 +120,6 @@ func (cci *CircleCI) Sync() {
 			projectName:  projectName.(string),
 			session:      cci.session,
 		}
-
 		pevi.Sync()
 	}
 }
