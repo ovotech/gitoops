@@ -23,7 +23,7 @@ func cmdCircleCI(cmd *flag.FlagSet) {
 
 	db := database.GetDB(neo4jURI, neo4jUser, neo4jPassword)
 
-	cci := circleci.GetCircleCI(db, organization, *circleCICookie)
+	cci := circleci.GetCircleCI(db, organization, *circleCICookie, session)
 	cci.Sync()
 }
 

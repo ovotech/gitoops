@@ -14,9 +14,10 @@ type CircleCI struct {
 	restclient   *RESTClient
 	db           *database.Database
 	organization string
+	session      string
 }
 
-func GetCircleCI(db *database.Database, organization, cookie string) *CircleCI {
+func GetCircleCI(db *database.Database, organization, cookie, session string) *CircleCI {
 	// Make sure cookie value is URL encoded by checking it doesn't have characters we'd expect to
 	// be encoded.
 	re := regexp.MustCompile(`(\+|\/|-|=| )`)
@@ -36,6 +37,7 @@ func GetCircleCI(db *database.Database, organization, cookie string) *CircleCI {
 		},
 		db:           db,
 		organization: organization,
+		session:      session,
 	}
 
 	return cci
