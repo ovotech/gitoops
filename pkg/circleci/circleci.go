@@ -63,8 +63,8 @@ func (cci *CircleCI) Sync() {
 	ci.Sync()
 
 	contextRecords := cci.db.Run(
-		`MATCH (c:CircleCIContext) RETURN c.id as contextId, c.name as contextName`,
-		map[string]interface{}{},
+		`MATCH (c:CircleCIContext{session:$session}) RETURN c.id as contextId, c.name as contextName`,
+		map[string]interface{}{"session": cci.session},
 	)
 	for contextRecords.Next() {
 		contextId, _ := contextRecords.Record().Get("contextId")
@@ -82,8 +82,8 @@ func (cci *CircleCI) Sync() {
 
 	// repoIngestors query at a specific repo level
 	repoRecords := cci.db.Run(
-		`MATCH (r:Repository) RETURN r.name as repoName`,
-		map[string]interface{}{},
+		`MATCH (r:Repository{session:$session}) RETURN r.name as repoName`,
+		map[string]interface{}{"session": cci.session},
 	)
 	for repoRecords.Next() {
 		repoName, _ := repoRecords.Record().Get("repoName")
@@ -102,8 +102,8 @@ func (cci *CircleCI) Sync() {
 
 	// queries existing CircleCIProjects
 	projectRecords := cci.db.Run(
-		`MATCH (p:CircleCIProject) RETURN p.repository as projectName`,
-		map[string]interface{}{},
+		`MATCH (p:CircleCIProject{session:$session}) RETURN p.repository as projectName`,
+		map[string]interface{}{"session": cci.session},
 	)
 	for projectRecords.Next() {
 		projectName, _ := projectRecords.Record().Get("projectName")
