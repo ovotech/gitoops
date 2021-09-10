@@ -80,7 +80,10 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	}
 
 	// teamIngestors query at a specific team level
-	teamRecords := g.db.Run(`MATCH (t:Team) RETURN t.slug as teamSlug`, map[string]interface{}{})
+	teamRecords := g.db.Run(
+		`MATCH (t:Team{session:$session}) RETURN t.slug as teamSlug`,
+		map[string]interface{}{"session": g.session},
+	)
 	for teamRecords.Next() {
 		teamSlug, _ := teamRecords.Record().Get("teamSlug")
 
@@ -112,8 +115,8 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 
 	// repoIngestors query at a specific repo level
 	repoRecords := g.db.Run(
-		`MATCH (r:Repository) RETURN r.name as repoName`,
-		map[string]interface{}{},
+		`MATCH (r:Repository{session:$session}) RETURN r.name as repoName`,
+		map[string]interface{}{"session": g.session},
 	)
 	for repoRecords.Next() {
 		repoName, _ := repoRecords.Record().Get("repoName")
