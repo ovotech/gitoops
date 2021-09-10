@@ -122,14 +122,14 @@ RETURN p
 
 ```
 $ cd cmd/
-$ go run . github								\
-		   -debug								\
-		   -organization fakenews				\
-		   -neo4j-password $NEO4J_PASSWORD		\
-		   -neo4j-uri="neo4j://localhost:7687"	\
-		   -token $GITHUB_TOKEN					\
-		   -ingestor default					\
-		   -session helloworld
+$ go run . github                              \
+           -debug                              \
+           -organization fakenews              \
+           -neo4j-password $NEO4J_PASSWORD     \
+           -neo4j-uri="neo4j://localhost:7687" \
+           -token $GITHUB_TOKEN                \
+           -ingestor default                   \
+           -session helloworld
 ```
 
 Most parameters should be self-explanatory. Note that the `session` is just a unique identifier for this run of the ingestor. You can use this to remove old nodes and relationships that are no longer relevant (by removing any nodes and relationships that don't have the latest session identifier from your database).
@@ -140,13 +140,13 @@ Unfortunately, the documented CircleCI REST API doesn't give everything we want.
 
 ```
 $ export CIRCLECI_COOKIE=RING_SESSION_COOKIE_VALUE
-$ go run . circleci								\
-		   -debug								\
-		   -organization fakenews				\
-		   -neo4j-password $NEO4J_PASSWORD		\
-		   -neo4j-uri="neo4j://localhost:7687"	\
-		   -cookie=$CIRCLECI_COOKIE				\
-		   -session helloworld
+$ go run . circleci                            \
+           -debug                              \
+           -organization fakenews              \
+           -neo4j-password $NEO4J_PASSWORD     \
+           -neo4j-uri="neo4j://localhost:7687" \
+           -cookie=$CIRCLECI_COOKIE            \
+           -session helloworld
 ```
 
 ### Data enrichment
@@ -154,10 +154,10 @@ $ go run . circleci								\
 We do some very crude "enriching" of data. After you've ingested GitHub proceed to:
 
 ```
-$ go run . enrich 								\
-		   -debug								\
-		   -organization fakenews				\
-		   -session helloworld					\
-		   -neo4j-password $NEO4J_PASSWORD		\
-		   -neo4j-uri="neo4j://localhost:7687"
+$ go run . enrich                             \
+           -debug                             \
+           -organization fakenews             \
+           -session helloworld                \
+           -neo4j-password $NEO4J_PASSWORD    \
+           -neo4j-uri="neo4j://localhost:7687"
 ```
