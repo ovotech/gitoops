@@ -10,6 +10,7 @@ type TeamsIngestor struct {
 	gqlclient *GraphQLClient
 	db        *database.Database
 	data      *TeamsData
+	session   string
 }
 
 type TeamsData struct {
@@ -86,6 +87,7 @@ func (ing *TeamsIngestor) insertTeams() {
 
 	SET t.name = team.name,
 	t.url = team.url,
-	t.slug = team.slug
-	`, map[string]interface{}{"teams": teams})
+	t.slug = team.slug,
+	t.session = $session
+	`, map[string]interface{}{"teams": teams, "session": ing.session})
 }

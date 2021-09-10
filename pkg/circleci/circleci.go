@@ -14,9 +14,10 @@ type CircleCI struct {
 	restclient   *RESTClient
 	db           *database.Database
 	organization string
+	session      string
 }
 
-func GetCircleCI(db *database.Database, organization, cookie string) *CircleCI {
+func GetCircleCI(db *database.Database, organization, cookie, session string) *CircleCI {
 	// Make sure cookie value is URL encoded by checking it doesn't have characters we'd expect to
 	// be encoded.
 	re := regexp.MustCompile(`(\+|\/|-|=| )`)
@@ -36,6 +37,7 @@ func GetCircleCI(db *database.Database, organization, cookie string) *CircleCI {
 		},
 		db:           db,
 		organization: organization,
+		session:      session,
 	}
 
 	return cci
@@ -48,6 +50,7 @@ func (cci *CircleCI) Sync() {
 		// db:           cci.db,
 		data:         &OrganizationData{},
 		organization: cci.organization,
+		session:      cci.session,
 	}
 	organizationId := oi.GetOrganizationId()
 
@@ -57,12 +60,13 @@ func (cci *CircleCI) Sync() {
 		db:             cci.db,
 		data:           &ContextsData{},
 		organizationId: organizationId,
+		session:        cci.session,
 	}
 	ci.Sync()
 
 	contextRecords := cci.db.Run(
-		`MATCH (c:CircleCIContext) RETURN c.id as contextId, c.name as contextName`,
-		map[string]interface{}{},
+		`MATCH (c:CircleCIContext{session:$session}) RETURN c.id as contextId, c.name as contextName`,
+		map[string]interface{}{"session": cci.session},
 	)
 	for contextRecords.Next() {
 		contextId, _ := contextRecords.Record().Get("contextId")
@@ -74,14 +78,15 @@ func (cci *CircleCI) Sync() {
 			db:        cci.db,
 			data:      &ContextEnvVarsData{},
 			contextId: contextId.(string),
+			session:   cci.session,
 		}
 		cevi.Sync()
 	}
 
 	// repoIngestors query at a specific repo level
 	repoRecords := cci.db.Run(
-		`MATCH (r:Repository) RETURN r.name as repoName`,
-		map[string]interface{}{},
+		`MATCH (r:Repository{session:$session}) RETURN r.name as repoName`,
+		map[string]interface{}{"session": cci.session},
 	)
 	for repoRecords.Next() {
 		repoName, _ := repoRecords.Record().Get("repoName")
@@ -93,15 +98,15 @@ func (cci *CircleCI) Sync() {
 			data:         &ProjectData{},
 			organization: cci.organization,
 			repoName:     repoName.(string),
+			session:      cci.session,
 		}
-
 		pi.Sync()
 	}
 
 	// queries existing CircleCIProjects
 	projectRecords := cci.db.Run(
-		`MATCH (p:CircleCIProject) RETURN p.repository as projectName`,
-		map[string]interface{}{},
+		`MATCH (p:CircleCIProject{session:$session}) RETURN p.repository as projectName`,
+		map[string]interface{}{"session": cci.session},
 	)
 	for projectRecords.Next() {
 		projectName, _ := projectRecords.Record().Get("projectName")
@@ -113,8 +118,8 @@ func (cci *CircleCI) Sync() {
 			data:         &ProjectEnvVarsData{},
 			organization: cci.organization,
 			projectName:  projectName.(string),
+			session:      cci.session,
 		}
-
 		pevi.Sync()
 	}
 }

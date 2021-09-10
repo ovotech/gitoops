@@ -11,9 +11,10 @@ type GitHub struct {
 	gqlclient  *GraphQLClient
 	restclient *RESTClient
 	db         *database.Database
+	session    string
 }
 
-func GetGitHub(db *database.Database, token, organization string) *GitHub {
+func GetGitHub(db *database.Database, token, organization, session string) *GitHub {
 	return &GitHub{
 		gqlclient: &GraphQLClient{
 			client:       &http.Client{},
@@ -25,7 +26,8 @@ func GetGitHub(db *database.Database, token, organization string) *GitHub {
 			token:        token,
 			organization: organization,
 		},
-		db: db,
+		db:      db,
+		session: session,
 	}
 }
 
@@ -43,10 +45,30 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	// nb: order matters for these!
 	orgIngestorOrderedKeys := []string{"organizations", "teams", "users", "repos"}
 	orgIngestors := map[string]Ingestor{
-		"organizations": &OrganizationsIngestor{gqlclient: g.gqlclient, db: g.db},
-		"teams":         &TeamsIngestor{gqlclient: g.gqlclient, db: g.db},
-		"users":         &UsersIngestor{gqlclient: g.gqlclient, db: g.db},
-		"repos":         &ReposIngestor{gqlclient: g.gqlclient, db: g.db},
+		"organizations": &OrganizationsIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &OrganizationsData{},
+			session:   g.session,
+		},
+		"teams": &TeamsIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &TeamsData{},
+			session:   g.session,
+		},
+		"users": &UsersIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &UsersData{},
+			session:   g.session,
+		},
+		"repos": &ReposIngestor{
+			gqlclient: g.gqlclient,
+			db:        g.db,
+			data:      &ReposData{},
+			session:   g.session,
+		},
 	}
 
 	for _, name := range orgIngestorOrderedKeys {
@@ -58,7 +80,10 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	}
 
 	// teamIngestors query at a specific team level
-	teamRecords := g.db.Run(`MATCH (t:Team) RETURN t.slug as teamSlug`, map[string]interface{}{})
+	teamRecords := g.db.Run(
+		`MATCH (t:Team{session:$session}) RETURN t.slug as teamSlug`,
+		map[string]interface{}{"session": g.session},
+	)
 	for teamRecords.Next() {
 		teamSlug, _ := teamRecords.Record().Get("teamSlug")
 
@@ -66,12 +91,16 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			"teamrepos": &TeamReposIngestor{
 				gqlclient: g.gqlclient,
 				db:        g.db,
+				data:      &TeamReposData{},
 				teamSlug:  teamSlug.(string),
+				session:   g.session,
 			},
 			"teammembers": &TeamMembersIngestor{
 				gqlclient: g.gqlclient,
 				db:        g.db,
+				data:      &TeamMembersData{},
 				teamSlug:  teamSlug.(string),
+				session:   g.session,
 			},
 		}
 
@@ -86,8 +115,8 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 
 	// repoIngestors query at a specific repo level
 	repoRecords := g.db.Run(
-		`MATCH (r:Repository) RETURN r.name as repoName`,
-		map[string]interface{}{},
+		`MATCH (r:Repository{session:$session}) RETURN r.name as repoName`,
+		map[string]interface{}{"session": g.session},
 	)
 	for repoRecords.Next() {
 		repoName, _ := repoRecords.Record().Get("repoName")
@@ -97,6 +126,7 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 				restclient: g.restclient,
 				db:         g.db,
 				repoName:   repoName.(string),
+				session:    g.session,
 			},
 		}
 

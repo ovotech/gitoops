@@ -14,6 +14,7 @@ type RepoWebhooksIngestor struct {
 	db         *database.Database
 	data       *RepoWebhooksData
 	repoName   string
+	session    string
 }
 
 type RepoWebhooksData []struct {
@@ -77,11 +78,13 @@ func (ing *RepoWebhooksIngestor) insertRepoWebhooks() {
 	w.url = webhook.url,
 	w.target = webhook.target,
 	w.host = webhook.host,
-	w.events = webhook.events
+	w.events = webhook.events,
+	w.session = $session
 
 	WITH w, webhook
 
 	MATCH (r:Repository{name: webhook.repoName})
 	MERGE (r)-[rel:HAS_WEBHOOK]->(w)
-	`, map[string]interface{}{"webhooks": webhooks})
+	SET rel.session = $session
+	`, map[string]interface{}{"webhooks": webhooks, "session": ing.session})
 }

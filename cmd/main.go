@@ -19,6 +19,7 @@ var (
 	neo4jURI      string
 	neo4jUser     string
 	neo4jPassword string
+	session       string
 
 	githubCmd       = flag.NewFlagSet("github", flag.ExitOnError)
 	githubToken     = githubCmd.String("token", "", "The GitHub access token.")
@@ -108,15 +109,22 @@ func setupCommonFlags() {
 		fs.StringVar(&neo4jURI, "neo4j-uri", "neo4j://localhost:7687", "The Neo4j URI.")
 		fs.StringVar(&neo4jUser, "neo4j-user", "neo4j", "The Neo4j user.")
 		fs.StringVar(&neo4jPassword, "neo4j-password", "", "The Neo4j password.")
+		fs.StringVar(
+			&session,
+			"session",
+			"",
+			"A session ID for this run. This will be set or updated on nodes and relationships that are present during this run, allowing us to remove nodes and relationships that no longer exist.",
+		)
 		fs.BoolVar(&debug, "debug", false, "Enable debug logging.")
 	}
 }
 
-// Validate commong flags used by all commands.
+// Validate common flags used by all commands.
 func validateCommonParams() {
 	requiredFlags := map[string]string{
 		organization:  "-organization",
 		neo4jPassword: "-neo4j-password",
+		session:       "-session",
 	}
 
 	for k, v := range requiredFlags {

@@ -13,6 +13,7 @@ type TeamMembersIngestor struct {
 	db        *database.Database
 	data      *TeamMembersData
 	teamSlug  string
+	session   string
 }
 
 type TeamMembersData struct {
@@ -82,11 +83,13 @@ func (ing *TeamMembersIngestor) insertTeamMembers() {
 	MERGE (u:User{id: member.url})
 
 	SET u.login = member.login,
-	u.url = member.url
+	u.url = member.url,
+	u.session = $session
 
 	WITH u, member
 
 	MATCH (t:Team{slug: member.teamSlug})
 	MERGE (u)-[rel:IS_MEMBER_OF{role: member.role}]->(t)
-	`, map[string]interface{}{"members": members})
+	SET rel.session = $session
+	`, map[string]interface{}{"members": members, "session": ing.session})
 }
