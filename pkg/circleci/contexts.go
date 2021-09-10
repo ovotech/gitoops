@@ -95,12 +95,14 @@ func (ing *ContextsIngestor) insertTeamsContexts() {
 	MERGE (c:CircleCIContext{id: context.id})
 
 	SET c.name = context.name,
-	c.all_members = false
+	c.all_members = false,
+	c.session = $session
 
 	WITH c, context
 	MATCH (t:Team{name: context.team})
 	MERGE (t)-[rel:HAS_ACCESS_TO_CIRCLECI_CONTEXT]->(c)
-	`, map[string]interface{}{"contexts": contexts})
+	SET rel.session = $session
+	`, map[string]interface{}{"contexts": contexts, "session": ing.session})
 }
 
 // Insert contexts that are accessible by all members of the GitHub org.
@@ -127,10 +129,12 @@ func (ing *ContextsIngestor) insertAllMembersContexts() {
 	MERGE (c:CircleCIContext{id: context.id})
 
 	SET c.name = context.name,
-	c.all_members = true
+	c.all_members = true,
+	c.session = $session
 
 	WITH c, context
 	MATCH (u:User)
 	MERGE (u)-[rel:HAS_ACCESS_TO_CIRCLECI_CONTEXT]->(c)
-	`, map[string]interface{}{"contexts": contexts})
+	SET rel.session = $session
+	`, map[string]interface{}{"contexts": contexts, "session": ing.session})
 }

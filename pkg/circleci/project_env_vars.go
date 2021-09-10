@@ -54,10 +54,12 @@ func (ing *ProjectEnvVarsIngestor) insertProjectEnvVars() {
 
 	MERGE (v:EnvironmentVariable{id: envVar.id})
 
-	SET v.variable = envVar.variable
+	SET v.variable = envVar.variable,
+	v.session = $session
 
 	WITH v, envVar
 	MATCH (c:CircleCIProject{id: envVar.projectId})
 	MERGE (c)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
-	`, map[string]interface{}{"envVars": envVars})
+	SET rel.session = $session
+	`, map[string]interface{}{"envVars": envVars, "session": ing.session})
 }
