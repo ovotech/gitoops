@@ -49,6 +49,9 @@ type ReposData struct {
 		BuildSBT struct {
 			Text string `json:"text"`
 		} `json:"buildsbt"`
+		Codeowners struct {
+			Text string `json:"text"`
+		} `json:"codeowners"`
 		Actions struct {
 			Entries []struct {
 				Name   string `json:"name"`
@@ -159,6 +162,11 @@ func (ing *ReposIngestor) fetchData() {
 						}
 					}
 					buildsbt: object(expression: "HEAD:build.sbt") {
+						... on Blob {
+							text
+						}
+					}
+					codeowners:object(expression: "HEAD:.github/CODEOWNERS") {
 						... on Blob {
 							text
 						}
@@ -350,6 +358,15 @@ func (ing *ReposIngestor) insertReposFiles() {
 				"id":     id,
 				"path":   "build.sbt",
 				"text":   repoNode.BuildSBT.Text,
+				"repoID": repoNode.URL,
+			})
+		}
+		if repoNode.Codeowners.Text != "" {
+			id := fmt.Sprintf("%x", md5.Sum([]byte("codeowners"+repoNode.URL)))
+			reposFiles = append(reposFiles, map[string]interface{}{
+				"id":     id,
+				"path":   ".github/CODEOWNERS",
+				"text":   repoNode.Codeowners.Text,
 				"repoID": repoNode.URL,
 			})
 		}
