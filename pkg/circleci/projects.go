@@ -15,6 +15,7 @@ type ProjectIngestor struct {
 	data         *ProjectData
 	organization string
 	repoName     string
+	session      string
 }
 
 type ProjectData struct {

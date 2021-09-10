@@ -15,6 +15,7 @@ type ProjectEnvVarsIngestor struct {
 	data         *ProjectEnvVarsData
 	organization string
 	projectName  string
+	session      string
 }
 
 type ProjectEnvVarsData struct {

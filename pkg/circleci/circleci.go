@@ -50,6 +50,7 @@ func (cci *CircleCI) Sync() {
 		// db:           cci.db,
 		data:         &OrganizationData{},
 		organization: cci.organization,
+		session:      cci.session,
 	}
 	organizationId := oi.GetOrganizationId()
 
@@ -59,6 +60,7 @@ func (cci *CircleCI) Sync() {
 		db:             cci.db,
 		data:           &ContextsData{},
 		organizationId: organizationId,
+		session:        cci.session,
 	}
 	ci.Sync()
 
@@ -76,6 +78,7 @@ func (cci *CircleCI) Sync() {
 			db:        cci.db,
 			data:      &ContextEnvVarsData{},
 			contextId: contextId.(string),
+			session:   cci.session,
 		}
 		cevi.Sync()
 	}
@@ -95,6 +98,7 @@ func (cci *CircleCI) Sync() {
 			data:         &ProjectData{},
 			organization: cci.organization,
 			repoName:     repoName.(string),
+			session:      cci.session,
 		}
 
 		pi.Sync()
@@ -115,6 +119,7 @@ func (cci *CircleCI) Sync() {
 			data:         &ProjectEnvVarsData{},
 			organization: cci.organization,
 			projectName:  projectName.(string),
+			session:      cci.session,
 		}
 
 		pevi.Sync()

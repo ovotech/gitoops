@@ -9,6 +9,7 @@ type OrganizationIngestor struct {
 	// db           *database.Database
 	data         *OrganizationData
 	organization string
+	session      string
 }
 
 type OrganizationData struct {

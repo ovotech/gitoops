@@ -13,6 +13,7 @@ type ContextEnVarsIngestor struct {
 	db        *database.Database
 	data      *ContextEnvVarsData
 	contextId string
+	session   string
 }
 
 type ContextEnvVarsData struct {

@@ -11,6 +11,7 @@ type ContextsIngestor struct {
 	db             *database.Database
 	data           *ContextsData
 	organizationId string
+	session        string
 }
 
 type ContextsData struct {
