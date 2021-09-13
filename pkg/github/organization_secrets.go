@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/ovotech/gitoops/pkg/database"
@@ -25,10 +26,17 @@ type OrganizationSecretsData struct {
 	} `json:"secrets"`
 }
 
+type OrganizationSecretsSelectedRepositories struct {
+	Repositories []struct {
+		HTMLURL string `json:"html_url"`
+	} `json:"repositories"`
+}
+
 func (ing *OrganizationSecretsIngestor) Sync() {
 	ing.fetchData()
 	ing.insertAllRepositoriesSecrets()
 	ing.insertPrivateRepositoriesSecrets()
+	ing.insertSelectedRepositoriesSecrets()
 }
 
 func (ing *OrganizationSecretsIngestor) fetchData() {
@@ -94,6 +102,46 @@ func (ing *OrganizationSecretsIngestor) insertPrivateRepositoriesSecrets() {
 	WITH v
 
 	MATCH (r:Repository{isPrivate:TRUE})
+	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
+	SET rel.session = $session
+	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
+}
+
+func (ing *OrganizationSecretsIngestor) insertSelectedRepositoriesSecrets() {
+	secrets := []map[string]interface{}{}
+
+	for _, secret := range ing.data.Secrets {
+		if secret.Visibility != "selected" {
+			continue
+		}
+
+		// fetch list of repositories
+		u, _ := url.Parse(secret.SelectedRepositoriesURL)
+		data := ing.restclient.fetch(u.Path)
+		selectedRepositories := OrganizationSecretsSelectedRepositories{}
+		json.Unmarshal(data, &selectedRepositories)
+
+		id := fmt.Sprintf("%x", md5.Sum([]byte(secret.CreatedAt.String()+secret.Name)))
+		for _, repository := range selectedRepositories.Repositories {
+			secrets = append(secrets, map[string]interface{}{
+				"id":      id,
+				"name":    secret.Name,
+				"repoURL": repository.HTMLURL,
+			})
+		}
+	}
+
+	ing.db.Run(`
+	UNWIND $secrets AS secret
+
+	MERGE (v:EnvironmentVariable{id: secret.id})
+
+	SET v.name = secret.name,
+	v.session = $session
+
+	WITH v, secret
+
+	MATCH (r:Repository{id: secret.repoURL})
 	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
 	SET rel.session = $session
 	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
