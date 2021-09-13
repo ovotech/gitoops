@@ -42,6 +42,9 @@ func (ing *OrganizationSecretsIngestor) insertAllRepositoriesSecrets() {
 	secrets := []map[string]interface{}{}
 
 	for _, secret := range ing.data.Secrets {
+		if secret.Visibility != "all" {
+			continue
+		}
 		id := fmt.Sprintf("%x", md5.Sum([]byte(secret.CreatedAt.String()+secret.Name)))
 		secrets = append(secrets, map[string]interface{}{
 			"id":   id,
