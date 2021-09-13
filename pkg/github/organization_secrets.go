@@ -44,7 +44,6 @@ func (ing *OrganizationSecretsIngestor) fetchData() {
 
 	data := ing.restclient.fetch(query)
 	json.Unmarshal(data, &ing.data)
-	fmt.Println(ing.data)
 }
 
 func (ing *OrganizationSecretsIngestor) insertAllRepositoriesSecrets() {
