@@ -146,6 +146,7 @@ func resolveIngestorNames(names []string) ([]string, error) {
 		"teamrepos",
 		"teammembers",
 		"repowebhooks",
+		"organizationsecrets",
 	}
 	defaultNames := []string{
 		"organizations",
@@ -154,6 +155,9 @@ func resolveIngestorNames(names []string) ([]string, error) {
 		"repos",
 		"teamrepos",
 		"teammembers",
+	}
+	secretsNames := []string{
+		"organizationsecrets",
 	}
 
 	// If no names were passed on CLI, we return default names
@@ -165,6 +169,12 @@ func resolveIngestorNames(names []string) ([]string, error) {
 	if sliceContains(names, "default") {
 		names = sliceRemove(names, "default")
 		names = append(names, defaultNames...)
+	}
+
+	// Expand secrets names
+	if sliceContains(names, "secrets") {
+		names = sliceRemove(names, "secrets")
+		names = append(names, secretsNames...)
 	}
 
 	// Validate all names
