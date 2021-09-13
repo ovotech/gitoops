@@ -28,6 +28,7 @@ type OrganizationSecretsData struct {
 func (ing *OrganizationSecretsIngestor) Sync() {
 	ing.fetchData()
 	ing.insertAllRepositoriesSecrets()
+	ing.insertPrivateRepositoriesSecrets()
 }
 
 func (ing *OrganizationSecretsIngestor) fetchData() {
@@ -63,6 +64,36 @@ func (ing *OrganizationSecretsIngestor) insertAllRepositoriesSecrets() {
 	WITH v
 
 	MATCH (r:Repository)
+	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
+	SET rel.session = $session
+	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
+}
+
+func (ing *OrganizationSecretsIngestor) insertPrivateRepositoriesSecrets() {
+	secrets := []map[string]interface{}{}
+
+	for _, secret := range ing.data.Secrets {
+		if secret.Visibility != "private" {
+			continue
+		}
+		id := fmt.Sprintf("%x", md5.Sum([]byte(secret.CreatedAt.String()+secret.Name)))
+		secrets = append(secrets, map[string]interface{}{
+			"id":   id,
+			"name": secret.Name,
+		})
+	}
+
+	ing.db.Run(`
+	UNWIND $secrets AS secret
+
+	MERGE (v:EnvironmentVariable{id: secret.id})
+
+	SET v.name = secret.name,
+	v.session = $session
+
+	WITH v
+
+	MATCH (r:Repository{isPrivate:TRUE})
 	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
 	SET rel.session = $session
 	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
