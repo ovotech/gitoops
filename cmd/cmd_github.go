@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"os"
 
@@ -53,4 +54,60 @@ func validateGitHubParams() {
 			log.Fatalf("The %s flag is required. See help for more details.", v)
 		}
 	}
+}
+
+// Takes list of ingestor names, expands default, validates topics, and returns list of unique
+// lowercase topics to ingest.
+func resolveIngestorNames(names []string) ([]string, error) {
+	names = sliceLower(names)
+	validNames := []string{
+		"organizations",
+		"teams",
+		"users",
+		"repos",
+		"teamrepos",
+		"teammembers",
+		"repowebhooks",
+		"organizationsecrets",
+	}
+	defaultNames := []string{
+		"organizations",
+		"teams",
+		"users",
+		"repos",
+		"teamrepos",
+		"teammembers",
+	}
+	secretsNames := []string{
+		"organizationsecrets",
+	}
+
+	// If no names were passed on CLI, we return default names
+	if len(names) == 0 {
+		return defaultNames, nil
+	}
+
+	// Expand default names
+	if sliceContains(names, "default") {
+		names = sliceRemove(names, "default")
+		names = append(names, defaultNames...)
+	}
+
+	// Expand secrets names
+	if sliceContains(names, "secrets") {
+		names = sliceRemove(names, "secrets")
+		names = append(names, secretsNames...)
+	}
+
+	// Validate all names
+	for _, name := range names {
+		if !sliceContains(validNames, name) {
+			return nil, fmt.Errorf("invalid ingestor name %s", name)
+		}
+	}
+
+	// Remove duplicates
+	names = sliceDeduplicate(names)
+
+	return names, nil
 }
