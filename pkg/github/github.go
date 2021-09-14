@@ -126,15 +126,23 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	}
 
 	// repoIngestors query at a specific repo level
-	repoRecords := g.db.Run(
-		`MATCH (r:Repository{session:$session}) RETURN r.name as repoName`,
+	repoRecords := g.db.Run(`
+		MATCH (r:Repository) RETURN r.name as repoName, r.databaseId as repoId
+		`,
 		map[string]interface{}{"session": g.session},
 	)
 	for repoRecords.Next() {
 		repoName, _ := repoRecords.Record().Get("repoName")
+		repoId, _ := repoRecords.Record().Get("repoId")
 
 		repoIngestors := map[string]Ingestor{
 			"repowebhooks": &RepoWebhooksIngestor{
+				restclient: g.restclient,
+				db:         g.db,
+				repoName:   repoName.(string),
+				session:    g.session,
+			},
+			"environments": &EnvironmentsIngestor{
 				restclient: g.restclient,
 				db:         g.db,
 				repoName:   repoName.(string),
@@ -147,6 +155,44 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 				continue
 			}
 			log.Infof("Running repo ingestor %s on repo %s", name, repoName)
+			ingestor.Sync()
+		}
+
+		g.runEnvironmentIngestors(targetIngestors, repoName.(string), repoId.(int64))
+	}
+}
+
+// Runs environment level ingestors on repositories
+func (g *GitHub) runEnvironmentIngestors(targetIngestors []string, repoName string, repoId int64) {
+	repoEnvironments := g.db.Run(`
+		MATCH (:Repository{session:$session, name:$repoName})-->(e:Environment{session:$session})
+		RETURN e.name as envName
+		`,
+		map[string]interface{}{"session": g.session, "repoName": repoName},
+	)
+
+	for repoEnvironments.Next() {
+		envName, _ := repoEnvironments.Record().Get("envName")
+		envIngestors := map[string]Ingestor{
+			"environmentsecrets": &EnvironmentSecretsIngestor{
+				restclient: g.restclient,
+				db:         g.db,
+				repoId:     repoId,
+				envName:    envName.(string),
+				session:    g.session,
+			},
+		}
+
+		for name, ingestor := range envIngestors {
+			if !sliceContains(targetIngestors, name) {
+				continue
+			}
+			log.Infof(
+				"Running environment ingestor %s on repo %s for env %s",
+				name,
+				repoName,
+				envName,
+			)
 			ingestor.Sync()
 		}
 	}
