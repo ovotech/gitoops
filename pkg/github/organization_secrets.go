@@ -73,7 +73,17 @@ func (ing *OrganizationSecretsIngestor) insertAllRepositoriesSecrets() {
 	MATCH (r:Repository)
 	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
 	SET rel.session = $session
-	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
+
+	WITH v
+
+	MATCH (o:Organization{login: $organization})
+	MERGE (o)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
+	SET rel.session = $session
+	`, map[string]interface{}{
+		"secrets":      secrets,
+		"organization": ing.restclient.organization,
+		"session":      ing.session,
+	})
 }
 
 func (ing *OrganizationSecretsIngestor) insertPrivateRepositoriesSecrets() {
@@ -103,7 +113,17 @@ func (ing *OrganizationSecretsIngestor) insertPrivateRepositoriesSecrets() {
 	MATCH (r:Repository{isPrivate:TRUE})
 	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
 	SET rel.session = $session
-	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
+
+	WITH v
+
+	MATCH (o:Organization{login: $organization})
+	MERGE (o)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
+	SET rel.session = $session
+	`, map[string]interface{}{
+		"secrets":      secrets,
+		"organization": ing.restclient.organization,
+		"session":      ing.session,
+	})
 }
 
 func (ing *OrganizationSecretsIngestor) insertSelectedRepositoriesSecrets() {
@@ -143,5 +163,15 @@ func (ing *OrganizationSecretsIngestor) insertSelectedRepositoriesSecrets() {
 	MATCH (r:Repository{id: secret.repoURL})
 	MERGE (r)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
 	SET rel.session = $session
-	`, map[string]interface{}{"secrets": secrets, "session": ing.session})
+
+	WITH v
+
+	MATCH (o:Organization{login: $organization})
+	MERGE (o)-[rel:EXPOSES_ENVIRONMENT_VARIABLE]->(v)
+	SET rel.session = $session
+	`, map[string]interface{}{
+		"secrets":      secrets,
+		"organization": ing.restclient.organization,
+		"session":      ing.session,
+	})
 }
