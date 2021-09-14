@@ -40,9 +40,14 @@ func (g *GitHub) Sync() {
 // Takes a slice of ingestor names and calls those in the right order.
 func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	log.Infof("Syncing with these ingestors: %s", targetIngestors)
+	g.runOrgIngestors(targetIngestors)
+	g.runTeamIngestors(targetIngestors)
+	g.runRepoIngestors(targetIngestors)
+}
 
-	// orgIngestors query at the org level, as opposed to querying a specific team or repo.
-	// nb: order matters for these!
+// Runs Org ingestors if they're in targetIngestors. Org ingestors operate at the wider org level.
+func (g *GitHub) runOrgIngestors(targetIngestors []string) {
+	// NB: order matters for these!
 	orgIngestorOrderedKeys := []string{
 		"organizations",
 		"teams",
@@ -90,13 +95,10 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 		log.Infof("Running org ingestor %s", name)
 		orgIngestors[name].Sync()
 	}
-
-	g.runTeamIngestors(targetIngestors)
-	g.runRepoIngestors(targetIngestors)
 }
 
-// Runs team ingestors if they're in targetIngestors. Repository ingestors operate at a
-// specific repo level.
+// Runs team ingestors if they're in targetIngestors. Team ingestors operate at a
+// specific team level.
 func (g *GitHub) runTeamIngestors(targetIngestors []string) {
 	// teamIngestors query at a specific team level
 	teamRecords := g.db.Run(
