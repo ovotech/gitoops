@@ -18,6 +18,7 @@ type ReposIngestor struct {
 
 type ReposData struct {
 	Nodes []struct {
+		DatabaseId    int    `json:"databaseId"`
 		URL           string `json:"url"`
 		Name          string `json:"name"`
 		IsPrivate     bool   `json:"isPrivate"`
@@ -123,6 +124,7 @@ func (ing *ReposIngestor) fetchData() {
 					hasNextPage
 				}
 				nodes {
+					databaseId
 					url
 					name
 					isPrivate
@@ -245,6 +247,7 @@ func (ing *ReposIngestor) insertRepos() {
 
 	for _, repoNode := range ing.data.Nodes {
 		repos = append(repos, map[string]interface{}{
+			"databaseId":   repoNode.DatabaseId,
 			"url":          repoNode.URL,
 			"name":         repoNode.Name,
 			"isPrivate":    repoNode.IsPrivate,
@@ -259,6 +262,7 @@ func (ing *ReposIngestor) insertRepos() {
 	MERGE (r:Repository{id: repo.url})
 
 	SET r.url = repo.url,
+	r.databaseId = repo.databaseId,
 	r.name = repo.name,
 	r.isPrivate = repo.isPrivate,
 	r.isArchived = repo.isArchived,
