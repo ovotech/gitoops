@@ -20,7 +20,8 @@ func cmdGitHub(cmd *flag.FlagSet) {
 		"ingestor",
 		"Ingestors to call. Supports: Organizations, Teams, Users, Repos, TeamRepos, "+
 			"TeamMembers, Default (all previous), RepoWebhooks, OrganizationSecrets, "+
-			"Secrets (all GitHub secrets related ingestors). May be used multiple times.",
+			"Environments, EnvironmentSecrets, Secrets (all GitHub secrets-related ingestors). "+
+			"May be used multiple times.",
 	)
 	// Parse arguments
 	cmd.Parse(os.Args[2:])
@@ -69,6 +70,8 @@ func resolveIngestorNames(names []string) ([]string, error) {
 		"teammembers",
 		"repowebhooks",
 		"organizationsecrets",
+		"environments",
+		"environmentsecrets",
 	}
 	defaultNames := []string{
 		"organizations",
@@ -80,6 +83,8 @@ func resolveIngestorNames(names []string) ([]string, error) {
 	}
 	secretsNames := []string{
 		"organizationsecrets",
+		"environments",
+		"environmentsecrets",
 	}
 
 	// If no names were passed on CLI, we return default names
