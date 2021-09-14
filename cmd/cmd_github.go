@@ -18,7 +18,8 @@ func cmdGitHub(cmd *flag.FlagSet) {
 		&githubIngestors,
 		"ingestor",
 		"Ingestors to call. Supports: Organizations, Teams, Users, Repos, TeamRepos, "+
-			"TeamMembers, Default (all previous), RepoWebhooks. May be used multiple times.",
+			"TeamMembers, Default (all previous), RepoWebhooks, OrganizationSecrets, "+
+			"Secrets (all GitHub secrets related ingestors). May be used multiple times.",
 	)
 	// Parse arguments
 	cmd.Parse(os.Args[2:])

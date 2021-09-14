@@ -43,7 +43,13 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 
 	// orgIngestors query at the org level, as opposed to querying a specific team or repo.
 	// nb: order matters for these!
-	orgIngestorOrderedKeys := []string{"organizations", "teams", "users", "repos"}
+	orgIngestorOrderedKeys := []string{
+		"organizations",
+		"teams",
+		"users",
+		"repos",
+		"organizationsecrets",
+	}
 	orgIngestors := map[string]Ingestor{
 		"organizations": &OrganizationsIngestor{
 			gqlclient: g.gqlclient,
@@ -68,6 +74,12 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			db:        g.db,
 			data:      &ReposData{},
 			session:   g.session,
+		},
+		"organizationsecrets": &OrganizationSecretsIngestor{
+			restclient: g.restclient,
+			db:         g.db,
+			data:       &OrganizationSecretsData{},
+			session:    g.session,
 		},
 	}
 
