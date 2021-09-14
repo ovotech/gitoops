@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"strings"
 
 	"github.com/ovotech/gitoops/pkg/database"
 	"github.com/ovotech/gitoops/pkg/enrich"
@@ -132,111 +131,4 @@ func validateCommonParams() {
 			log.Fatalf("The %s flag is required for all commands.", v)
 		}
 	}
-}
-
-// Takes list of ingestor names, expands default, validates topics, and returns list of unique
-// lowercase topics to ingest.
-func resolveIngestorNames(names []string) ([]string, error) {
-	names = sliceLower(names)
-	validNames := []string{
-		"organizations",
-		"teams",
-		"users",
-		"repos",
-		"teamrepos",
-		"teammembers",
-		"repowebhooks",
-		"organizationsecrets",
-	}
-	defaultNames := []string{
-		"organizations",
-		"teams",
-		"users",
-		"repos",
-		"teamrepos",
-		"teammembers",
-	}
-	secretsNames := []string{
-		"organizationsecrets",
-	}
-
-	// If no names were passed on CLI, we return default names
-	if len(names) == 0 {
-		return defaultNames, nil
-	}
-
-	// Expand default names
-	if sliceContains(names, "default") {
-		names = sliceRemove(names, "default")
-		names = append(names, defaultNames...)
-	}
-
-	// Expand secrets names
-	if sliceContains(names, "secrets") {
-		names = sliceRemove(names, "secrets")
-		names = append(names, secretsNames...)
-	}
-
-	// Validate all names
-	for _, name := range names {
-		if !sliceContains(validNames, name) {
-			return nil, fmt.Errorf("invalid ingestor name %s", name)
-		}
-	}
-
-	// Remove duplicates
-	names = sliceDeduplicate(names)
-
-	return names, nil
-}
-
-// Returns true if slice s contains element e, false otherwise.
-func sliceContains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
-// Returns lowercased slice of strings.
-func sliceLower(s []string) []string {
-	r := []string{}
-	for _, a := range s {
-		r = append(r, strings.ToLower(a))
-	}
-	return r
-}
-
-// Returns slice s with all occurences of e removed.
-func sliceRemove(s []string, e string) []string {
-	var hit bool
-	for {
-		hit = false
-		for i, a := range s {
-			if a == e {
-				s = append(s[:i], s[i+1:]...)
-				hit = true
-				break
-			}
-		}
-		if !hit {
-			break
-		}
-	}
-	return s
-}
-
-// Returns slice s with duplicates removed.
-func sliceDeduplicate(s []string) []string {
-	keys := make(map[string]bool)
-	r := []string{}
-	for _, e := range s {
-		if _, seen := keys[e]; !seen {
-			keys[e] = true
-			r = append(r, e)
-		}
-	}
-	return r
 }
