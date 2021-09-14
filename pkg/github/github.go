@@ -91,6 +91,13 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 		orgIngestors[name].Sync()
 	}
 
+	g.runTeamIngestors(targetIngestors)
+	g.runRepoIngestors(targetIngestors)
+}
+
+// Runs team ingestors if they're in targetIngestors. Repository ingestors operate at a
+// specific repo level.
+func (g *GitHub) runTeamIngestors(targetIngestors []string) {
 	// teamIngestors query at a specific team level
 	teamRecords := g.db.Run(
 		`MATCH (t:Team{session:$session}) RETURN t.slug as teamSlug`,
@@ -124,12 +131,10 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			ingestor.Sync()
 		}
 	}
-
-	g.runRepoIngestors(targetIngestors)
 }
 
 // Runs repository ingestors if they're in targetIngestors. Repository ingestors operate at a
-// specific repo level
+// specific repo level.
 func (g *GitHub) runRepoIngestors(targetIngestors []string) {
 	repoRecords := g.db.Run(`
 		MATCH (r:Repository) RETURN r.name as repoName, r.databaseId as repoId
