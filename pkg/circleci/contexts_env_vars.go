@@ -59,7 +59,7 @@ func (ing *ContextEnVarsIngestor) insertContextsEnvVars() {
 		envVars = append(envVars, map[string]interface{}{
 			"id":             id,
 			"contextId":      ing.data.Id,
-			"variable":       resource.Variable,
+			"name":           resource.Variable,
 			"truncatedValue": resource.TruncatedValue,
 		})
 	}
@@ -69,7 +69,7 @@ func (ing *ContextEnVarsIngestor) insertContextsEnvVars() {
 
 	MERGE (v:EnvironmentVariable{id: envVar.id})
 
-	SET v.variable = envVar.variable,
+	SET v.name = envVar.name,
 	v.truncatedValue = envVar.truncatedValue,
 	v.session = $session
 

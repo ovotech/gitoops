@@ -44,7 +44,7 @@ func (ing *ProjectEnvVarsIngestor) insertProjectEnvVars() {
 		envVars = append(envVars, map[string]interface{}{
 			"id":             id,
 			"projectId":      ing.projectName,
-			"variable":       item.Name,
+			"name":           item.Name,
 			"truncatedValue": item.Value[len(item.Value)-4:],
 		})
 	}
@@ -54,7 +54,7 @@ func (ing *ProjectEnvVarsIngestor) insertProjectEnvVars() {
 
 	MERGE (v:EnvironmentVariable{id: envVar.id})
 
-	SET v.variable = envVar.variable,
+	SET v.name = envVar.name,
 	v.session = $session
 
 	WITH v, envVar
