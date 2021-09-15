@@ -65,6 +65,11 @@ func (c *RESTClient) fetch(resourcePath string) []byte {
 
 	// map status code to RESTError
 	errorTracker := map[int]RESTError{}
+	// some APIs (like repo webhooks) return a list of objects as the root level element
+	// others return an object with a top level "total_count" along with list of objects
+	// we treat each case separately and use isObjectAPI to track which one we're dealing with
+	isObjectAPI := false
+
 	for {
 		code, resp := c.call(resourcePath, page)
 
@@ -77,25 +82,45 @@ func (c *RESTClient) fetch(resourcePath string) []byte {
 			c.trackFetchErrors(code, parsedResp, errorTracker)
 		}
 
-		// gabs doesn't support merging two arrays if they are the root element
-		// see: https://github.com/Jeffail/gabs/issues/60
-		// the recommended workaround is to place the arrays in a field before merging
-		d := gabs.New()
-		d.Array("nodes")
-		d.Set(parsedResp, "nodes")
+		// note: we're currently running this check on each iteration even though we expect it to
+		// be the same for all iterations of this loop. we have no way of knowing ahead of time
+		// whether an API will return list or an object at root level (unless we hardcoded it)
+		totalCount, ok := parsedResp.Path("total_count").Data().(float64)
+		if ok {
+			// handle cases like {"total_count": 0, "objects": []}
+			isObjectAPI = true
 
-		data.Merge(d)
+			data.Merge(parsedResp)
 
-		// If we have less than 100 items on a page, we've reached the end.
-		count, _ := parsedResp.ArrayCount()
-		if count < 100 {
-			break
+			if page*100 > int(totalCount) {
+				break
+			}
+		} else {
+			// handle cases like [{}, {}, ...]
+			// note that gabs doesn't support merging two arrays if they are the root element
+			// see: https://github.com/Jeffail/gabs/issues/60
+			// the recommended workaround is to place the arrays in a field before merging
+			d := gabs.New()
+			d.Array("nodes")
+			d.Set(parsedResp, "nodes")
+
+			data.Merge(d)
+
+			// If we have less than 100 items on a page, we've reached the end.
+			count, _ := parsedResp.ArrayCount()
+			if count < 100 {
+				break
+			}
 		}
 
 		page += 1
 	}
 
 	c.logFetchErrors(resourcePath, errorTracker)
+
+	if isObjectAPI {
+		return data.Bytes()
+	}
 
 	return data.Search("nodes").Bytes()
 }
