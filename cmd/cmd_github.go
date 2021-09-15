@@ -72,6 +72,7 @@ func resolveIngestorNames(names []string) ([]string, error) {
 		"organizationsecrets",
 		"environments",
 		"environmentsecrets",
+		"reposecrets",
 	}
 	defaultNames := []string{
 		"organizations",
@@ -85,6 +86,7 @@ func resolveIngestorNames(names []string) ([]string, error) {
 		"organizationsecrets",
 		"environments",
 		"environmentsecrets",
+		"reposecrets",
 	}
 
 	// If no names were passed on CLI, we return default names
