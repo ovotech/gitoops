@@ -139,7 +139,7 @@ func (g *GitHub) runTeamIngestors(targetIngestors []string) {
 // specific repo level.
 func (g *GitHub) runRepoIngestors(targetIngestors []string) {
 	repoRecords := g.db.Run(`
-		MATCH (r:Repository{name:"kiss"}) RETURN r.name as repoName, r.databaseId as repoId
+		MATCH (r:Repository) RETURN r.name as repoName, r.databaseId as repoId
 		`,
 		map[string]interface{}{"session": g.session},
 	)
