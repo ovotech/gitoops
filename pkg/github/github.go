@@ -40,9 +40,14 @@ func (g *GitHub) Sync() {
 // Takes a slice of ingestor names and calls those in the right order.
 func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 	log.Infof("Syncing with these ingestors: %s", targetIngestors)
+	g.runOrgIngestors(targetIngestors)
+	g.runTeamIngestors(targetIngestors)
+	g.runRepoIngestors(targetIngestors)
+}
 
-	// orgIngestors query at the org level, as opposed to querying a specific team or repo.
-	// nb: order matters for these!
+// Runs Org ingestors if they're in targetIngestors. Org ingestors operate at the wider org level.
+func (g *GitHub) runOrgIngestors(targetIngestors []string) {
+	// NB: order matters for these!
 	orgIngestorOrderedKeys := []string{
 		"organizations",
 		"teams",
@@ -90,7 +95,11 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 		log.Infof("Running org ingestor %s", name)
 		orgIngestors[name].Sync()
 	}
+}
 
+// Runs team ingestors if they're in targetIngestors. Team ingestors operate at a
+// specific team level.
+func (g *GitHub) runTeamIngestors(targetIngestors []string) {
 	// teamIngestors query at a specific team level
 	teamRecords := g.db.Run(
 		`MATCH (t:Team{session:$session}) RETURN t.slug as teamSlug`,
@@ -124,8 +133,11 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			ingestor.Sync()
 		}
 	}
+}
 
-	// repoIngestors query at a specific repo level
+// Runs repository ingestors if they're in targetIngestors. Repository ingestors operate at a
+// specific repo level.
+func (g *GitHub) runRepoIngestors(targetIngestors []string) {
 	repoRecords := g.db.Run(`
 		MATCH (r:Repository) RETURN r.name as repoName, r.databaseId as repoId
 		`,
@@ -158,12 +170,16 @@ func (g *GitHub) SyncByIngestorNames(targetIngestors []string) {
 			ingestor.Sync()
 		}
 
-		g.runEnvironmentIngestors(targetIngestors, repoName.(string), repoId.(int64))
+		g.runRepoEnvironmentIngestors(targetIngestors, repoName.(string), repoId.(int64))
 	}
 }
 
-// Runs environment level ingestors on repositories
-func (g *GitHub) runEnvironmentIngestors(targetIngestors []string, repoName string, repoId int64) {
+// Runs repository environment level ingestors on repositories if they're in the targetIngestors.
+func (g *GitHub) runRepoEnvironmentIngestors(
+	targetIngestors []string,
+	repoName string,
+	repoId int64,
+) {
 	repoEnvironments := g.db.Run(`
 		MATCH (:Repository{session:$session, name:$repoName})-->(e:Environment{session:$session})
 		RETURN e.name as envName
