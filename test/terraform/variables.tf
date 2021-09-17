@@ -80,7 +80,15 @@ variable "repos" {
     {
       name     = "console-spa"
       circleci = false
-    }
+    },
+	{
+		name = "aws-infra-copy"
+		circleci = true
+	},
+	{
+		name = "aws-infra-clone"
+		circleci = true
+	}
   ]
 }
 

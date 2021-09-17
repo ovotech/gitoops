@@ -6,6 +6,9 @@ terraform {
       source  = "integrations/github"
       version = "~> 4.0"
     }
+	circleci = {
+		source = "TomTucka/circleci"
+	}
   }
 }
 
@@ -31,6 +34,11 @@ resource "github_branch" "trigger" {
   for_each   = fileset(var.files_path, "**")
   repository = var.name
   branch     = var.branch
+
+  depends_on = [
+	github_repository.repo,
+	github_repository_file.repo
+  ]
 }
 
 resource "github_repository_file" "trigger" {
@@ -48,19 +56,24 @@ resource "github_repository_file" "trigger" {
   ]
 }
 
-resource "github_repository_webhook" "hook" {
-  count = var.circleci ? 1 : 0
+resource "circleci_project" "repo" {
+  	count = var.circleci ? 1 : 0
+    name     = var.name
 
-  repository = var.name
+  depends_on = [
+	github_repository.repo,
+	github_repository_file.repo,
+	github_branch.trigger
+  ]
+}
 
-  configuration {
-    url          = "https://circleci.com/hooks/github"
-    content_type = "form"
-    insecure_ssl = false
-  }
+resource "time_sleep" "wait_for_cirlceci" {
+  create_duration = "30s"
 
-  active = true
-  events = ["pull_request", "repository", "push"]
+    depends_on = [
+		circleci_project.repo
+	]
+
 }
 
 resource "github_repository_pull_request" "pr" {
@@ -71,7 +84,6 @@ resource "github_repository_pull_request" "pr" {
   body            = "this is just a demo pipeline run"
 
   depends_on = [
-    github_repository_webhook.hook,
-	github_repository_file.repo
+	time_sleep.wait_for_cirlceci
   ]
 }

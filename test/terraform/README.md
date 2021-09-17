@@ -2,7 +2,7 @@
 
 We manage the [`failwhales`](https://github.com/failwhales) GitHub organization for testing GitOops end-to-end and provide demo material.
 
-The following steps were manual:
+The following steps are manual:
 
 - Create the organization
 - Add CircleCI from the Marketplace

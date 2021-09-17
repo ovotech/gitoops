@@ -11,6 +11,7 @@ module "repos" {
 
   providers = {
     github = github.github
+	circleci = circleciprojects
   }
 }
 
