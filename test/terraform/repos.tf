@@ -6,6 +6,7 @@ module "repos" {
   org        = var.org_name
   name       = var.repos[count.index]
   files_path = "${var.repos_path}/${var.repos[count.index]}"
+  branch     = var.branch_name
 
   providers = {
     github = github.github

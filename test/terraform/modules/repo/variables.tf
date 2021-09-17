@@ -1,5 +1,5 @@
 variable "org" {
-type = string
+  type = string
 }
 
 variable "name" {
@@ -7,5 +7,9 @@ variable "name" {
 }
 
 variable "files_path" {
-	type=string
+  type = string
+}
+
+variable "branch" {
+  type = string
 }

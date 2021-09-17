@@ -94,3 +94,8 @@ variable "team_repos" {
     }
   ]
 }
+
+variable "branch_name" {
+  description = "Name of branch we use to trigger CI on our repos"
+  default     = "trigger"
+}

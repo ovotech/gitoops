@@ -15,7 +15,7 @@ resource "github_repository" "repo" {
 }
 
 resource "github_repository_file" "repo" {
-	for_each = fileset(var.files_path, "**")
+  for_each = fileset(var.files_path, "**")
 
   repository          = github_repository.repo.name
   branch              = "main"
@@ -25,4 +25,10 @@ resource "github_repository_file" "repo" {
   commit_author       = "Terraform User"
   commit_email        = "terraform@example.com"
   overwrite_on_create = true
+}
+
+resource "github_branch" "development" {
+  for_each   = fileset(var.files_path, "**")
+  repository = var.name
+  branch     = "trigger"
 }
