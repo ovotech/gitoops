@@ -13,3 +13,7 @@ variable "files_path" {
 variable "branch" {
   type = string
 }
+
+variable "circleci" {
+  type = string
+}

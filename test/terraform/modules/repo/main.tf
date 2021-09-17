@@ -27,8 +27,51 @@ resource "github_repository_file" "repo" {
   overwrite_on_create = true
 }
 
-resource "github_branch" "development" {
+resource "github_branch" "trigger" {
   for_each   = fileset(var.files_path, "**")
   repository = var.name
-  branch     = "trigger"
+  branch     = var.branch
+}
+
+resource "github_repository_file" "trigger" {
+  repository          = github_repository.repo.name
+  branch     = var.branch
+  file                = "trigger"
+  content             = "trigger pipeline"
+  commit_message      = "trigger"
+  commit_author       = "Terraform User"
+  commit_email        = "terraform@example.com"
+  overwrite_on_create = true
+
+  depends_on = [
+    github_branch.trigger
+  ]
+}
+
+resource "github_repository_webhook" "hook" {
+  count = var.circleci ? 1 : 0
+
+  repository = var.name
+
+  configuration {
+    url          = "https://circleci.com/hooks/github"
+    content_type = "form"
+    insecure_ssl = false
+  }
+
+  active = true
+  events = ["pull_request", "repository", "push"]
+}
+
+resource "github_repository_pull_request" "pr" {
+  base_repository = var.name
+  base_ref        = "main"
+  head_ref        = var.branch
+  title           = "trigger pipeline"
+  body            = "this is just a demo pipeline run"
+
+  depends_on = [
+    github_repository_webhook.hook,
+	github_repository_file.repo
+  ]
 }

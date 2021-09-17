@@ -68,10 +68,19 @@ variable "repos_path" {
 }
 
 variable "repos" {
-  type = list(string)
+  type = list(object({
+    name     = string
+    circleci = bool
+  }))
   default = [
-    "aws-infra",
-    "console-spa",
+    {
+      name     = "aws-infra"
+      circleci = true
+    },
+    {
+      name     = "console-spa"
+      circleci = false
+    }
   ]
 }
 

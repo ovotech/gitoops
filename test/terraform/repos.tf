@@ -4,9 +4,10 @@ module "repos" {
   source = "./modules/repo"
 
   org        = var.org_name
-  name       = var.repos[count.index]
-  files_path = "${var.repos_path}/${var.repos[count.index]}"
+  name       = var.repos[count.index].name
+  files_path = "${var.repos_path}/${var.repos[count.index].name}"
   branch     = var.branch_name
+  circleci   = var.repos[count.index].circleci
 
   providers = {
     github = github.github
