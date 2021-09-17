@@ -61,3 +61,36 @@ variable "memberships" {
     }
   ]
 }
+
+variable "repos_path" {
+  type    = string
+  default = "./data/repos"
+}
+
+variable "repos" {
+  type = list(string)
+  default = [
+    "aws-infra",
+    "console-spa",
+  ]
+}
+
+variable "team_repos" {
+  type = list(object({
+    team       = string
+    repo       = string
+    permission = string
+  }))
+  default = [
+    {
+      team       = "infra"
+      repo       = "aws-infra"
+      permission = "admin"
+    },
+    {
+      team       = "frontend"
+      repo       = "console-spa"
+      permission = "admin"
+    }
+  ]
+}
