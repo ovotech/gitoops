@@ -2,7 +2,7 @@
 
 > all paths lead to clouds
 
-GitOops is a tool that helps attackers and defenders identify lateral movement and privilege escalation paths in GitHub organizations by abusing CI/CD pipelines and GitHub access controls.
+GitOops is a tool to help attackers and defenders identify lateral movement and privilege escalation paths in GitHub organizations by abusing CI/CD pipelines and GitHub access controls.
 
 It works by ingesting security-relevant information from your GitHub organization and your CI/CD systems into a Bolt-compatible graph database, allowing you the query attack paths with openCypher (Neo4j, AWS Neptune...)
 
@@ -16,10 +16,10 @@ In addition to mapping relationships between your users, teams and repositories,
 
 The following CI/CD systems are currently supported:
 
-- GitHub Actions (soon)
+- GitHub Actions
 - CircleCI
 
-On top of this, we ingest CI/CD configuration files from repositories for all popular CI/CD systems, allowing coarse queries on the configuration of pipelines for other CI/CD systems.
+On top of this, it ingests CI/CD configuration files from repositories for other popular CI/CD systems, enabling less refined queries on those.
 
 Finally, GitOops will also map status checks from commits to a repository's pull requests and default branch, allowing you to find integrations that are typically configured server-side (e.g. AWS CodeBuild).
 
