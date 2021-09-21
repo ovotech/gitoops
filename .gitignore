@@ -1,6 +1,4 @@
-
-# Created by https://www.toptal.com/developers/gitignore/api/terraform,go
-# Edit at https://www.toptal.com/developers/gitignore?templates=terraform,go
+/gitoops
 
 ### Go ###
 # Binaries for programs and plugins
@@ -57,7 +55,3 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-
-# End of https://www.toptal.com/developers/gitignore/api/terraform,go
-
-export_tokens.sh
