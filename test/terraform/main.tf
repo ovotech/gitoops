@@ -4,14 +4,14 @@ terraform {
       source  = "integrations/github"
       version = "~> 4.0"
     }
-	// two different third-party providers from randomers (we're not doing any sensitive with these)
-	// one supports contexts, the other supports projects
-	circlecicontexts = {
-		source = "mrolla/circleci"
-	}
-	circleciprojects = {
-		source = "TomTucka/circleci"
-	}
+    // two different third-party providers from randomers (we're not doing any sensitive with these)
+    // one supports contexts, the other supports projects
+    circlecicontexts = {
+      source = "mrolla/circleci"
+    }
+    circleciprojects = {
+      source = "TomTucka/circleci"
+    }
   }
 }
 

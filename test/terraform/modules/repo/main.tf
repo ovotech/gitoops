@@ -6,9 +6,9 @@ terraform {
       source  = "integrations/github"
       version = "~> 4.0"
     }
-	circleci = {
-		source = "TomTucka/circleci"
-	}
+    circleci = {
+      source = "TomTucka/circleci"
+    }
   }
 }
 
@@ -36,14 +36,14 @@ resource "github_branch" "trigger" {
   branch     = var.branch
 
   depends_on = [
-	github_repository.repo,
-	github_repository_file.repo
+    github_repository.repo,
+    github_repository_file.repo
   ]
 }
 
 resource "github_repository_file" "trigger" {
   repository          = github_repository.repo.name
-  branch     = var.branch
+  branch              = var.branch
   file                = "trigger"
   content             = "trigger pipeline"
   commit_message      = "trigger"
@@ -57,22 +57,22 @@ resource "github_repository_file" "trigger" {
 }
 
 resource "circleci_project" "repo" {
-  	count = var.circleci ? 1 : 0
-    name     = var.name
+  count = var.circleci ? 1 : 0
+  name  = var.name
 
   depends_on = [
-	github_repository.repo,
-	github_repository_file.repo,
-	github_branch.trigger
+    github_repository.repo,
+    github_repository_file.repo,
+    github_branch.trigger
   ]
 }
 
 resource "time_sleep" "wait_for_cirlceci" {
   create_duration = "30s"
 
-    depends_on = [
-		circleci_project.repo
-	]
+  depends_on = [
+    circleci_project.repo
+  ]
 
 }
 
@@ -84,6 +84,6 @@ resource "github_repository_pull_request" "pr" {
   body            = "this is just a demo pipeline run"
 
   depends_on = [
-	time_sleep.wait_for_cirlceci
+    time_sleep.wait_for_cirlceci
   ]
 }

@@ -10,8 +10,8 @@ module "repos" {
   circleci   = var.repos[count.index].circleci
 
   providers = {
-    github = github.github
-	circleci = circleciprojects
+    github   = github.github
+    circleci = circleciprojects
   }
 }
 
