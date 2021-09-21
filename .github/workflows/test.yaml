@@ -1,0 +1,85 @@
+name: integration
+
+on:
+  pull_request:
+
+jobs:
+  gofmt:
+    name: check Golang formatting
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Lint code
+      run: test -z $(gofmt -l .)
+    - name: Linting failed
+      if: ${{ failure() }}
+      run: gofmt -d -l .
+
+  tffmt:
+    name: check Terraform formatting
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -recursive -check test/terraform
+      continue-on-error: true
+
+  # register whether the GitHub token is available
+  # it won't be available to any non-collaborators, in which case we won't run the e2e tests
+  checksecret:
+    name: check if GITHUB_TOKEN is set
+    runs-on: ubuntu-latest
+    outputs:
+      failwhales_token_set: ${{ steps.checksecret_job.outputs.failwhales_token_set }}
+    steps:
+      - name: Check whether unity activation requests should be done
+        id: checksecret_job
+        env:
+            GITHUB_TOKEN: ${{ secrets.FAILWHALES_GITHUB_TOKEN }}
+        run: |
+            echo "failwhales_token_set: ${{ env.GITHUB_TOKEN != '' }}"
+            echo "::set-output name=failwhales_token_set::${{ env.GITHUB_TOKEN != '' }}"
+    
+  e2e:
+    name: run e2e tests
+    needs: [checksecret]
+    if: needs.checksecret.outputs.failwhales_token_set == 'true'
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_ORGANIZATION: failwhales
+      GITHUB_TOKEN: ${{ secrets.FAILWHALES_GITHUB_TOKEN }}
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+        key: go-${{ hashFiles('**/go.sum') }}
+        restore-keys: go-
+    - name: Run tests
+      run: go test ./test/e2e/...
+
+  noe2e:
+    name: e2e tests not run
+    needs: [checksecret]
+    if: needs.checksecret.outputs.failwhales_token_set == 'false'
+    runs-on: ubuntu-latest
+    steps:
+    - name: alert e2e tests not run
+      run: |
+        echo "We didn't run e2e tests as GITHUB_TOKEN was not set"
+        exit 1 
