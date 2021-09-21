@@ -8,17 +8,17 @@ variable "org_short" {
 
 variable "owners" {
   type    = list(string)
-  default = ["serain", "congon4tor", "owner-fw"]
+  default = ["serain", "bob-fw"]
 }
 
 variable "members" {
   type = list(string)
   default = [
-    "alice",
-    "bob",
-    "charlotte",
-    "daniel",
-    "ellie"
+    "alice-fw",
+    "bob-fw",
+    "charlotte-fw",
+    "daniel-fw",
+    "ellie-fw"
   ]
 }
 
@@ -41,23 +41,23 @@ variable "memberships" {
   default = [
     {
       team   = "admin"
-      member = "alice"
+      member = "alice-fw"
     },
     {
       team   = "infra"
-      member = "bob"
+      member = "bob-fw"
     },
     {
       team   = "payments"
-      member = "charlotte"
+      member = "charlotte-fw"
     },
     {
       team   = "data"
-      member = "daniel"
+      member = "daniel-fw"
     },
     {
       team   = "frontend"
-      member = "ellie"
+      member = "ellie-fw"
     }
   ]
 }

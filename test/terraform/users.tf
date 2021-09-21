@@ -7,7 +7,7 @@ resource "github_membership" "owner" {
 
 resource "github_membership" "member" {
   count    = length(var.members)
-  username = "${var.members[count.index]}-${var.org_short}"
+  username = var.members[count.index]
   role     = "member"
 }
 
@@ -24,6 +24,6 @@ resource "github_team_membership" "membership" {
   team_id = github_team.team[
     index(github_team.team.*.name, var.memberships[count.index].team)
   ].id
-  username = "${var.memberships[count.index].member}-${var.org_short}"
+  username = var.memberships[count.index].member
   role     = "member"
 }
