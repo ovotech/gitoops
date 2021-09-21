@@ -1,0 +1,14 @@
+version: 2.1
+
+jobs:
+  tf_plan_prod:
+    docker:
+      - image: ubuntu
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+
+workflows:
+  build_and_test:
+    jobs:
+      - tf_plan_prod
