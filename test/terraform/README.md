@@ -13,4 +13,4 @@ The rest is defined here as Terraform.
 
 There is currently no CI/CD for this. Applying this requires a user token with `admin:org` and `repo` scopes for a `failwhales` user with `OWNER` permissions.
 
-Secrets for the org admin are in the Kaluza Security `Engineering team's password manager.
+Secrets for the org admin are in the Kaluza Security Engineering team's password manager. A GitHub token for the org admin is also passed to the PR test workflow if triggered by a repository collaborator.
