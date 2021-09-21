@@ -72,7 +72,7 @@ jobs:
         restore-keys: go-
     - name: Set up DB
       run: |
-        docker-compose -f docker-compose.yml up
+        docker-compose -f docker-compose.yml up -d
     - name: Run tests
       run: go test ./test/e2e/...
 
