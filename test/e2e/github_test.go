@@ -9,7 +9,7 @@ func TestUserRelationships(t *testing.T) {
 				label: "User",
 				property: property{
 					name:  "login",
-					value: "alice-fw",
+					value: "alice-fwaa",
 				},
 			},
 			r: relationship{
