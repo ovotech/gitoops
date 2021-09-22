@@ -30,7 +30,7 @@ jobs:
           restore-keys: ${{ runner.os }}-go-
 
       - name: Compile
-        working-directory: ./client/cmd
+        working-directory: ./cmd
         run: |
           go build -o /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }} .
 
@@ -68,7 +68,7 @@ jobs:
           restore-keys: ${{ runner.os }}-go-
 
       - name: Compile
-        working-directory: ./client/cmd
+        working-directory: ./cmd
         run: |
           go build -o /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }} .
 
@@ -106,7 +106,7 @@ jobs:
           restore-keys: ${{ runner.os }}-go-
 
       - name: Compile
-        working-directory: ./client/cmd
+        working-directory: ./cmd
         run: |
           go build -o /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }} .
 
