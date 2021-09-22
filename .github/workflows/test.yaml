@@ -76,7 +76,7 @@ jobs:
     - name: Wait for DB
       run: sleep 10
     - name: Run tests
-      run: go test ./test/e2e/...
+      run: go test -v ./test/e2e/...
 
   noe2e:
     name: e2e tests not run
