@@ -32,14 +32,14 @@ jobs:
       - name: Compile
         working-directory: ./cmd
         run: |
-          go build -o /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }} .
+          go build -o /tmp/gitoops-linux .
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.TAG }}
           files: |
-            /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }}
+            /tmp/gitoops-linux
             LICENSE
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,14 +70,14 @@ jobs:
       - name: Compile
         working-directory: ./cmd
         run: |
-          go build -o /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }} .
+          go build -o /tmp/gitoops-macos .
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.TAG }}
           files: |
-            /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }}
+            /tmp/gitoops-macos
             LICENSE
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -108,14 +108,14 @@ jobs:
       - name: Compile
         working-directory: ./cmd
         run: |
-          go build -o /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }} .
+          go build -o /tmp/gitoops-windows .
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.TAG }}
           files: |
-            /tmp/gitoops-${{ env.GOOS }}-${{ env.GOARCH }}
+            /tmp/gitoops-windows
             LICENSE
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
