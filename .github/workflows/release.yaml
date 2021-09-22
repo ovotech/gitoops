@@ -20,8 +20,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
 
       - uses: actions/cache@v2
         with:
@@ -60,8 +58,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
 
       - uses: actions/cache@v2
         with:
@@ -100,8 +96,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
 
       - uses: actions/cache@v2
         with:
