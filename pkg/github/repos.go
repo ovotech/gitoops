@@ -445,7 +445,7 @@ func (ing *ReposIngestor) insertReposPullRequestsStatusChecks() {
 	WITH s, repoStatusCheck
 
 	MATCH (r:Repository{id: repoStatusCheck.repoID})
-	MERGE (r)-[rel:HAS_STATUS_CHECK{pull_request: true}]->(s)
+	MERGE (r)-[rel:HAS_STATUS_CHECK{pullRequest: true}]->(s)
 	SET rel.session = $session
 	`, map[string]interface{}{"reposStatusChecks": reposStatusChecks, "session": ing.session})
 }
@@ -482,7 +482,7 @@ func (ing *ReposIngestor) insertReposDefaultBranchStatusChecks() {
 	WITH s, repoStatusCheck
 
 	MATCH (r:Repository{id: repoStatusCheck.repoID})
-	MERGE (r)-[rel:HAS_STATUS_CHECK{default_branch: true}]->(s)
+	MERGE (r)-[rel:HAS_STATUS_CHECK{defaultBranch: true}]->(s)
 	SET rel.session = $session
 	`, map[string]interface{}{"reposStatusChecks": reposStatusChecks, "session": ing.session})
 }
