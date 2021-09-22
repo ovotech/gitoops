@@ -6,7 +6,12 @@ You may also consider using it as a package if you want to run some custom inges
 
 ## Install
 
-TODO
+Download the latest release for your OS from the [releases page](https://github.com/ovotech/gitoops/releases/latest) or:
+
+```
+$ export OS=linux # or macos/windows
+$ curl -Lso gitoops "https://github.com/ovotech/gitoops/releases/latest/download/gitoops-$OS"
+```
 
 ## Build
 
