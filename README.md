@@ -1,13 +1,16 @@
 <dl>
-
-  <p align="center">DNS Rebinding Exploitation Framework</p>
+  <h1>
+    <div align=center>GitOops!</div>
+    <div align=center>😱</div>
+  </h1>
+  <p align="center">all paths lead to cloud</p>
 
   <p align="center">
     <img src="./docs/screenshot.png">
   </p>
 </dl>
 
-# GitOops! 😱
+# GitOops!
 
 > all paths lead to clouds
 
