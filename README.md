@@ -3,7 +3,8 @@
     <div align=center>GitOops!</div>
     <div align=center>😱</div>
   </h1>
-  <p align="center">all paths lead to cloud</p>
+  <p align="center"><i>all paths lead to clouds</i></p>
+  <br />
 </dl>
 
 GitOops is a tool to help attackers and defenders identify lateral movement and privilege escalation paths in GitHub organizations by abusing CI/CD pipelines and GitHub access controls.
