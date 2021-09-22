@@ -9,7 +9,7 @@
 
 GitOops is a tool to help attackers and defenders identify lateral movement and privilege escalation paths in GitHub organizations by abusing CI/CD pipelines and GitHub access controls.
 
-It ingests relationships between your GitHub users, teams and repositories and environment variables in your CI/CD systems. It works with Bolt-compatible graph databases allowing you to query attack paths with openCypher:
+It ingests relationships between your GitHub users, teams and repositories and environment variables in your CI/CD systems. It works with Bolt-compatible graph databases, allowing you to query attack paths with openCypher:
 
 ```
 MATCH p=(:User{login:"alice"})-[*..5]->(v:EnvironmentVariable)
