@@ -18,9 +18,9 @@ Here are a some common scenarios:
 
 - The lack of production branch protections on a repository with a production continuous deployment pipeline could allow anyone with write access to the repository to deploy malicious changes to production.
 
-- The lack of branch-based access controls for secrets in CI/CD systems like CircleCI and, historically, [GitHub Actions](https://github.blog/changelog/2020-12-15-github-actions-environments-environment-protection-rules-and-environment-secrets-beta/), means that an un-trusted (un-reviewed) feature branch may have access to production secrets when running a build in a pull request context.
+- The lack of branch-based access controls for secrets in CI/CD systems like CircleCI and, historically, [GitHub Actions](https://github.blog/changelog/2020-12-15-github-actions-environments-environment-protection-rules-and-environment-secrets-beta/), means that an untrusted (unreviewed) feature branch may have access to production secrets when running a build in a pull request context.
 
-- Running a Terraform production _plan_ on an untrusted (un-reviewed) feature branch may give untrusted infrastructure code and Terraform providers [access to production and production secrets](https://alex.kaskaso.li/post/terraform-plan-rce).
+- Running a Terraform production _plan_ on an untrusted (unreviewed) feature branch may give untrusted infrastructure code and Terraform providers [access to production and production secrets](https://alex.kaskaso.li/post/terraform-plan-rce).
 
 - An excessive number of administrators on a critical repository can increase the chances of branch protections being disabled to enable an attack via CI/CD pipelines.
 
@@ -46,7 +46,7 @@ The relationships we are looking for are of moderate depth and can take several 
 An organization may use different CI/CD systems. We mostly use CircleCI, GitHub Actions and [AWS CodeBuild](https://tech.ovoenergy.com/building-a-secure-ci-cd-pipeline-for-terraform-infrastructure-as-code/), with a dash of Jenkins laying around for good ol' legacy reasons. Most CI/CD systems support user-defined environment variables, but with different twists. For example:
 
 - CircleCI has Contexts (which are a way of reusing a bundle of environment variables across projects) but also supports a way of directly attaching environment variables to specific Projects (which have a one-to-one mapping with GitHub repositories)
-- GitHub Actions also supports attaching environment variables diretly to repositories, but it also has a notion of Environment (essentially, environment variables directly attached to a repository, but with optional branch protection rules) and organization environment variables (available to all repositories in an organization)
+- GitHub Actions also supports attaching environment variables directly to repositories, but it also has a notion of Environment (essentially, environment variables directly attached to a repository, but with optional branch protection rules) and organization environment variables (available to all repositories in an organization)
 
 These approaches are quite different. Wouldn't it be great if we could search for all paths between a user and a secret without having to worry about which system(s) we're targetting?
 
