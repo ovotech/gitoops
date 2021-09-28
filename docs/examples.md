@@ -136,7 +136,17 @@ RETURN p
 <summary>Show me who's still using Jenkins</summary>
 <br>
 <pre>
-MATCH p=(t:Team)-[:HAS_PERMISSION_ON]->(r:Repository{isArchived:FALSE})-[:HAS_CI_CONFIGURATION_FILE]->(f:File{path:"Jenkinsfile"})
-RETURN p
+MATCH (r:Repository{isArchived:FALSE})-->(f:File{path:"Jenkinsfile"})
+RETURN r.name
+<br>
+UNION
+MATCH (r:Repository{isArchived:FALSE})-->(s:StatusCheck)
+WHERE s.host =~ ".*jenkins.*"
+RETURN r.name
+<br>
+UNION
+MATCH (r:Repository{isArchived:FALSE})-->(w:Webhook)
+WHERE w.host =~ ".*jenkins.*"
+RETURN r.name
 </pre>
 </details>
