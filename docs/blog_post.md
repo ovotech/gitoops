@@ -167,4 +167,6 @@ GitOops is currently designed for one-off mappings from a security engineer's la
 - remove old nodes and relationships from the database (we've [anticipated this requirement](https://github.com/ovotech/gitoops/blob/main/docs/run.md#ingest-github-data) with the `-session` flag)
 - monitor events and trigger alerts when a new relationship matches a known bad pattern
 
-We would also love to formally support additional CI/CD systems and VCS providers. If you want to contribute we'd be super interested! You can hit up the author on Twitter [@\_alxk](https://twitter.com/_alxk).
+We would also love to formally support additional CI/CD systems and VCS providers. If you want to contribute we'd be super interested!
+
+You can hit up the author on Twitter [@\_alxk](https://twitter.com/_alxk) and check out [GitOops on GitHub](https://github.com/ovotech/gitoops).
