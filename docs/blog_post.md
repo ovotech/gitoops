@@ -147,16 +147,14 @@ To throw a cherry on top, CircleCI allows us to retrieve the last four character
 I'm sure you see where this is going: if we're lucky we can run a query to predict the access an attacker would obtain by pivoting through `GITHUB_TOKEN` environment variables:
 
 ```
-
 MATCH (u:User{login:"alice"})-[*..5]->(v:EnvironmentVariable)
-WHERE v.variable =~ ".*GITHUB.*USER.\*"
+WHERE v.variable =~ ".*GITHUB.*USER.*"
 WITH DISTINCT(v.truncatedValue) as truncVal
 
-MATCH p=(u:User)-->[*..5]-->(:EnvironmentVariable)
+MATCH p=(u:User)-[*..5]->(:EnvironmentVariable)
 WHERE u.login =~ "^.\*" + truncVal + "$"
 
 RETURN p
-
 ```
 
 If we're not so lucky, can always extract the `GITHUB_TOKEN` through a pull request and hit the [`/user` GITHUB API endpoint](https://docs.github.com/en/rest/reference/users#get-the-authenticated-user) to retrieve the authenticated user's login.
