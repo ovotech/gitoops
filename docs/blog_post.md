@@ -182,6 +182,7 @@ RETURN p
 
 If we're not so lucky, we can always extract the `GITHUB_TOKEN` through a pull request and hit the [`/user` GitHub API endpoint](https://docs.github.com/en/rest/reference/users#get-the-authenticated-user) to retrieve the authenticated user's login.
 
+
 ## What's next?
 
 GitOops is currently designed for one-off mappings from a security engineer's laptop. In the future, we would like to move towards a form of continuous monitoring of an organization's GitHub security posture. Details will be fleshed out as we move along, but this may look something like:
