@@ -92,7 +92,7 @@ MATCH (r:Repository)-[HAS_CI_CONFIGURATION]->(f:File{path: ".circleci/config.yml
 WHERE any(x IN f.env WHERE x =~ ".*(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD).*")
 OR any(x IN f.tags WHERE x IN ["aws", "gcp", "terraform"])
 WITH r
-
+<br>
 MATCH (u:User)-[*..2]->(r)-[HAS_STATUS_CHECK{pullRequest:true}]->(s:StatusCheck)
 WITH r, COUNT(DISTINCT u) AS userCount
 WHERE userCount > 30
@@ -109,7 +109,7 @@ MATCH (r:Repository)-[HAS_CI_CONFIGURATION]->(f:File)
 WHERE any(x IN f.env WHERE x =~ ".*(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD).*")
 OR any(x IN f.tags WHERE x IN ["aws", "gcp", "terraform"])
 WITH r
-
+<br>
 MATCH (r)
 WHERE NOT (r)-[HAS_BRANCH_PROTECTION_RULE]->(:BranchProtectionRule)
 RETURN r
@@ -124,7 +124,7 @@ RETURN r
 MATCH (u:User)
 WHERE NOT (u)-[:IS_MEMBER_OF]->(:Organization{login:"fakenews"})
 WITH u
-
+<br>
 MATCH p=(u)-[*..5]->(v:EnvironmentVariable)
 WHERE v.variable =~ "._(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD)._"
 RETURN p
