@@ -19,7 +19,7 @@ RETURN p
 
 <dl>
   <p align="center">
-    <img src="./docs/screenshot.png">
+    <img src="./docs/img/screenshot.png">
   </p>
 </dl>
 
