@@ -43,7 +43,7 @@ and CI/CD:
 - jobs (i.e. `deploy prod` or `tf-plan-prod`)
 - environment variables (often secrets)
 
-The relationships we are looking for are of moderate depth and can also take several different forms.
+The relationships we are looking for are of moderate depth and can take several different forms.
 
 An organization may use different CI/CD systems. We mostly use CircleCI, GitHub Actions and [AWS CodeBuild](https://tech.ovoenergy.com/building-a-secure-ci-cd-pipeline-for-terraform-infrastructure-as-code/), with a dash of Jenkins laying around for good ol' legacy reasons. Most CI/CD systems support user-defined environment variables, but with different twists. For example:
 
