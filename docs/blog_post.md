@@ -157,7 +157,7 @@ WHERE u.login =~ "^.\*" + truncVal + "$"
 RETURN p
 ```
 
-If we're not so lucky, can always extract the `GITHUB_TOKEN` through a pull request and hit the [`/user` GITHUB API endpoint](https://docs.github.com/en/rest/reference/users#get-the-authenticated-user) to retrieve the authenticated user's login.
+If we're not so lucky, we can always extract the `GITHUB_TOKEN` through a pull request and hit the [`/user` GITHUB API endpoint](https://docs.github.com/en/rest/reference/users#get-the-authenticated-user) to retrieve the authenticated user's login.
 
 ## What's next?
 
