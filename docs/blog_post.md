@@ -128,6 +128,25 @@ OR any(x IN f.tags WHERE x IN ["aws", "gcp", "terraform"])
 RETURN r
 ```
 
+### Finding GitHub Actions secrets without branch protections
+
+GitHub Actions has supported branch protections for secrets [since December 2020](https://github.blog/changelog/2020-12-15-github-actions-environments-environment-protection-rules-and-environment-secrets-beta/), through a notion of "environment". Using this feature is optional.
+
+To find GitHub Actions environment variables that are not in environments (and therefor accessible to anyone who can open a pull request), we can search for direct relationships between a repository and environment variables:
+
+```
+MATCH p=(:Repository)-->(:EnvironmentVariable)
+RETURN p
+```
+
+Environments also needn't enforce any branch protections. We can look for environment variables that can be exfiltrated from any environment through a pull request:
+
+```
+MATCH p=(:Repository)-->(e:Environment)-->(:EnvironmentVariable)
+WHERE e.protectedBranches = false
+RETURN p
+```
+
 ### Attackable Terraform plans
 
 Production Terraform plans on unreviewed code are [a bad idea](https://alex.kaskaso.li/post/terraform-plan-rce). We attempt to find these by looking at the context values on pull requests' status checks, to get maximum coverage and account for CI/CD systems that may be configured server-side (e.g. AWS CodeBuild). The funky regex in this query means "things that contain `terraform` (or `tf`) and `prod` (or `prd`, and as long as it's not preceeded by `non`):
