@@ -24,7 +24,7 @@ RETURN p
 </details>
 
 <details>
-<summary>I just compromised a GitHub user called `superbot`. What new repositories did I gain access to?</summary>
+<summary>I just compromised a GitHub user called superbot. What new repositories did I gain access to?</summary>
 <br>
 <pre>
 MATCH (:User{login:"superbot"})-->(r:Repository)
@@ -54,7 +54,7 @@ RETURN p
 </details>
 
 <details>
-<summary>Show me repositories running production `terraform plan` on pull requests</summary>
+<summary>Show me repositories running production terraform plan on pull requests</summary>
 <br>
 Production Terraform plans on unreviewed code are [a bad idea](https://alex.kaskaso.li/post/terraform-plan-rce). We attempt to find these by looking at the context values on pull requests' status checks, to get maximum coverage and account for CI/CD systems that may be configured server-side (e.g. AWS CodeBuild).
 
@@ -67,7 +67,7 @@ RETURN r.name
 </details>
 
 <details>
-<summary>Show me `AWS_SECRET_ACCESS_KEY` variables my user can access through `WRITE` access to repositories with CircleCI project environment variables</summary>
+<summary>Show me AWS_SECRET_ACCESS_KEY variables my user can access through WRITE access to repositories with CircleCI project environment variables</summary>
 <br>
 CircleCI doesn't support branch-level protections for secrets. The implication is that if you can open a PR against a repository, you can exfiltrate secrets from the CI/CD context. These could be production secrets.
 
@@ -111,7 +111,7 @@ OR any(x IN f.tags WHERE x IN ["aws", "gcp", "terraform"])
 WITH r
 
 MATCH (r)
-WHERE NOT (r)-[:HAS_BRANCH_PROTECTION_RULE]->(:BranchProtectionRule)
+WHERE NOT (r)-[HAS_BRANCH_PROTECTION_RULE]->(:BranchProtectionRule)
 RETURN r
 
 </pre>
