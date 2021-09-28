@@ -138,7 +138,7 @@ RETURN r.name
 
 ### Pivoting through GitHub bots or: how I learned to stop worrying and love CircleCI
 
-This author has yet to witness a GitHub organization of a respectable size that did not make use of one or more GitHub "bot" user account. Personal Access Tokens (PATs) for these user accounts also have a sneaky habit of finding their way into CI/CD systems.
+This author has yet to witness a GitHub organization of a respectable size that did not make use of one or more GitHub "bot" user accounts. Personal Access Tokens (PATs) for these user accounts also have a sneaky habit of finding their way into CI/CD systems.
 
 What's more, several GitHub SDKs misleadingly give the impression that you need to provide a username when using a PAT (in reality any string will do). This has the interesting side effect of leading to `GITHUB_USERNAME` environment variables often being found next to `GITHUB_TOKEN` ones.
 
