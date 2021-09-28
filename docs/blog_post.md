@@ -86,11 +86,10 @@ We want to know which repositories have CI/CD configurations:
 
 ### Events
 
-We want to know:
+We want to know which repositories trigger jobs on pull requests and merges to the main branch. There's a couple of ways we can get this information:
 
-- Which repositories trigger jobs on pull requests and merges to the main branch? There's a couple of ways we can get this information:
-  - Repository webhook configurations can tell us which repository events trigger a webhook against specific CI/CD systems.
-  - Status checks can tell us a lot of about which kind of jobs are run on pull requests through their name.
+- Repository webhook configurations can tell us which repository events trigger a webhook against specific CI/CD systems.
+- Status checks can tell us a lot of about which kind of jobs are run on pull requests through their name.
 
 ### Secrets
 
