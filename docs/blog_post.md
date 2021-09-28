@@ -1,4 +1,4 @@
-# GitOops! Attacking and defending CI/CD pipelines
+# GitOops! Attacking and defending CI/CD pipelines.
 
 **As part of our [ongoing quest](https://tech.ovoenergy.com/building-a-secure-ci-cd-pipeline-for-terraform-infrastructure-as-code/) to improve the _status quo_ of CI/CD security, we present [GitOops](https://github.com/ovotech/gitoops): a tool to map CI/CD attack paths in a GitHub organization.**
 
@@ -116,6 +116,8 @@ MATCH p=(:User{login:"alice"})-[*..5]->(:EnvironmentVariable)
 RETURN p
 ```
 
+![all the secrets](img/screenshot.png)
+
 If we want support for other CI/CD systems, we could try the query below which will look for mentions of environment variables and certain keywords in configuration files:
 
 ```
@@ -132,9 +134,11 @@ Production Terraform plans on unreviewed code are [a bad idea](https://alex.kask
 
 ```
 MATCH (r:Repository)-[:HAS_STATUS_CHECK{pullRequest:TRUE}]->(s:StatusCheck)
-WHERE s.context =~ "(?=._(tf|terraform))(?=._(?<!non)pro?d).\*"
+WHERE s.context =~ "(?=.*(tf|terraform))(?=.*(?<!non)pro?d).*"
 RETURN r.name
 ```
+
+![terraform status checks](img/status-checks.png)
 
 ### Pivoting through GitHub bots or: how I learned to stop worrying and love CircleCI
 
