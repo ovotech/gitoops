@@ -152,7 +152,7 @@ I'm sure you see where this is going: if we're lucky we can run a query to predi
 
 ```
 MATCH (u:User{login:"alice"})-[*..5]->(v:EnvironmentVariable)
-WHERE v.variable =~ ".*GITHUB.*USER.*"
+WHERE v.name =~ ".*GITHUB.*USER.*"
 WITH DISTINCT(v.truncatedValue) as truncVal
 
 MATCH p=(u:User)-[*..5]->(:EnvironmentVariable)
