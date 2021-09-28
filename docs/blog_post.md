@@ -30,7 +30,7 @@ As organizations grow to have thousands of repositories, hundreds of users and t
 
 Graph databases are cool and trendy, but they can also be useful.
 
-If we abstract a way the details from the scenarios above, what we're really looking for are relationships between GitHub:
+If we abstract away the details from the scenarios above, what we're really looking for are relationships between GitHub:
 
 - users
 - teams
@@ -45,7 +45,7 @@ The relationships we are looking for are of moderate depth and can take several 
 
 An organization may use different CI/CD systems. We mostly use CircleCI, GitHub Actions and [AWS CodeBuild](https://tech.ovoenergy.com/building-a-secure-ci-cd-pipeline-for-terraform-infrastructure-as-code/), with a dash of Jenkins laying around for good ol' legacy reasons. Most CI/CD systems support user-defined environment variables, but with different twists. For example:
 
-- CircleCI has Contexts (which are away of reusing a bundle of environment variables across project) but also supports a way of directly attaching environment variables to specific Projects (which have a one-to-one mapping with GitHub repositories)
+- CircleCI has Contexts (which are a way of reusing a bundle of environment variables across project) but also supports a way of directly attaching environment variables to specific Projects (which have a one-to-one mapping with GitHub repositories)
 - GitHub Actions also supports attaching environment variables diretly to repositories, but it also has a notion of Environment (essentially, environment variables directly attached to a repository, but with optional branch protection rules) and organization environment variables (available to all repositories in an organization)
 
 These approaches are quite different. Wouldn't it be great if we could search for all paths between a user and a secret without having to worry about which system(s) we're targetting?
