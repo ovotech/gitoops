@@ -142,7 +142,7 @@ This author has yet to witness a GitHub organization of a respectable size that 
 
 What's more, several GitHub SDKs misleadingly give the impression that you need to provide a username when using a PAT (in reality any string will do). This has the interesting side effect of leading to `GITHUB_USERNAME` environment variables often being found next to `GITHUB_TOKEN` ones.
 
-To throw a cherry on top, CircleCI allows you to retrieve the last four characters of environment variables through their API.
+To throw a cherry on top, CircleCI allows us to retrieve the last four characters of environment variables through their API.
 
 I'm sure you see where this is going: if we're lucky we can run a query to predict the access an attacker would obtain by pivoting through `GITHUB_TOKEN` environment variables, thanks to a bit of regex:
 
