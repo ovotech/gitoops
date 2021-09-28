@@ -32,7 +32,7 @@ As organizations grow to have thousands of repositories, hundreds of users and t
 
 Graph databases are cool and trendy, but they can also be useful.
 
-If we abstract away the details from the scenarios above, what we're really looking for are relationships between GitHub:
+If we abstract a way the details from the scenarios above, what we're really looking for are relationships between GitHub:
 
 - users
 - teams
