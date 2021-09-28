@@ -38,6 +38,23 @@ WHERE s.context =~ "(?=.*(tf|terraform))(?=.*(?<!non)pro?d).*"
 RETURN r.name
 ```
 
+- Show me GitHub Actions secrets without branch protections
+
+To find GitHub Actions environment variables that are not in environments (and therefor accessible to anyone who can open a pull request), we can search for direct relationships between a repository and environment variables:
+
+```
+MATCH p=(:Repository)-->(:EnvironmentVariable)
+RETURN p
+```
+
+Environments also needn't enforce any branch protections. We can look for environment variables that can be exfiltrated from any environment through a pull request:
+
+```
+MATCH p=(:Repository)-->(e:Environment)-->(:EnvironmentVariable)
+WHERE e.protectedBranches = false
+RETURN p
+```
+
 - Show me `AWS_SECRET_ACCESS_KEY` variables my user can access through `WRITE` access to repositories with CircleCI project environment variables
 
 CircleCI doesn't support branch-level protections for secrets. The implication is that if you can open a PR against a repository, you can exfiltrate secrets from the CI/CD context. These could be production secrets.
