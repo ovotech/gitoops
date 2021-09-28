@@ -74,7 +74,7 @@ Now that we have justified the use of a hipster's DB, what do we store exactly? 
 We want to know:
 
 - Relationships between users and teams within an organization.
-- Repositories that users/teams can access. We're particular interested in repositories a user/team can open a pull request against (`write` access in GitHub) or have admin access on (allowing them to disable branch protections to abuse a production deployment pipeline triggered on a merge to the main branch, for example).
+- Repositories that users/teams can access. We're particularly interested in repositories a user/team can open a pull request against (`write` access in GitHub) or have admin access on (allowing them to disable branch protections to abuse a production deployment pipeline triggered on a merge to the main branch, for example).
 - Which repositories have branch protections enabled?
 
 ### CI/CD Configurations
