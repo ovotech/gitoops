@@ -28,8 +28,6 @@ As organizations grow to have thousands of repositories, hundreds of users and t
 
 ## Graph DBs aren't just for hipsters
 
-![Graphs everywhere](img/graphs-everywhere.jpeg)
-
 Graph databases are cool and trendy, but they can also be useful.
 
 If we abstract a way the details from the scenarios above, what we're really looking for are relationships between GitHub:
@@ -64,8 +62,6 @@ than to try to translate all possible paths into an SQL statement.
 We opted to work with Neo4j and the Cypher query language; the Community edition is free, easy to use and popular. The folks at Neo4j have also [open-sourced Cypher](https://opencypher.org/) and some [other graph databases](https://docs.aws.amazon.com/neptune/latest/userguide/access-graph-opencypher-bolt.html) have started supporting the Bolt binary protocol.
 
 ## What do we ingest?
-
-![all the things](img/ingest-all-the-things.jpg)
 
 Now that we have justified the use of a hipster's DB, what do we store exactly? We'll gloss over this here; you're welcome to check the [code](https://github.com/ovotech/gitoops) and the [schema](https://github.com/ovotech/gitoops/blob/main/docs/schema.md) for the details.
 
