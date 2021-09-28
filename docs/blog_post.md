@@ -1,4 +1,4 @@
-# GitOops! Attacking and defending CI/CD pipelines.
+# GitOops! Attacking and defending CI/CD pipelines
 
 **As part of our [ongoing quest](https://tech.ovoenergy.com/building-a-secure-ci-cd-pipeline-for-terraform-infrastructure-as-code/) to improve the _status quo_ of CI/CD security, we present [GitOops](https://github.com/ovotech/gitoops): a tool to map CI/CD attack paths in a GitHub organization.**
 
@@ -6,7 +6,7 @@ Lateral movement and privilege escalation via CI/CD pipelines is old news for th
 
 ![Unicorns don't just poop rainbows](img/devseccon.png)
 
-We will start by motivating our work by presenting an overview of the issues we are trying to spot at scale. We will then gloss over GitOops' inner-workings before demonstrating usage for some sample scenarios.
+We will start by motivating our work by presenting an overview of the issues we are trying to spot at scale. We will then gloss over GitOops' inner-workings before demonstrating usage with some sample scenarios.
 
 ## Introduction
 
