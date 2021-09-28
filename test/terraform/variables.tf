@@ -8,7 +8,7 @@ variable "org_short" {
 
 variable "owners" {
   type    = list(string)
-  default = ["serain", "bob-fw"]
+  default = ["serain", "admin-fw"]
 }
 
 variable "members" {
