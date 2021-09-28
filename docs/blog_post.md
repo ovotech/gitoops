@@ -75,7 +75,7 @@ We want to know:
 
 - Relationships between users and teams within an organization.
 - Repositories that users/teams can access. We're particularly interested in repositories a user/team can open a pull request against (`write` access in GitHub) or have admin access on (allowing them to disable branch protections to abuse a production deployment pipeline triggered on a merge to the main branch, for example).
-- Which repositories have branch protections enabled?
+- Repositories that have branch protections enabled.
 
 ### CI/CD Configurations
 
@@ -89,7 +89,7 @@ We want to know which repositories have CI/CD configurations:
 We want to know:
 
 - Which repositories trigger jobs on pull requests and merges to the main branch? There's a couple of ways we can get this information:
-  - Repository Webhook configurations can tell us which repository events trigger a Webhook against specific CI/CD systems.
+  - Repository webhook configurations can tell us which repository events trigger a webhook against specific CI/CD systems.
   - Status checks can tell us a lot of about which kind of jobs are run on pull requests through their name.
 
 ### Secrets
