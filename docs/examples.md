@@ -60,7 +60,7 @@ Production Terraform plans on unreviewed code are [a bad idea](https://alex.kask
 
 <pre>
 MATCH (r:Repository)-[:HAS_STATUS_CHECK{pullRequest:TRUE}]->(s:StatusCheck)
-WHERE s.context =~ "(?=.*(tf|terraform))(?=.*(?<!non)pro?d).*"
+WHERE s.context =~ "(?=.*(tf|terraform))(?=.*(?<&excl;non)pro?d).*"
 RETURN r.name
 </pre>
 
@@ -126,7 +126,7 @@ WHERE NOT (u)-[:IS_MEMBER_OF]->(:Organization{login:"fakenews"})
 WITH u
 <br>
 MATCH p=(u)-[*..5]->(v:EnvironmentVariable)
-WHERE v.name =~ "._(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD)._"
+WHERE v.name =~ ".*(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD).*"
 RETURN p
 
 </pre>
