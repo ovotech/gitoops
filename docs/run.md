@@ -78,7 +78,7 @@ The following ingestors need to run first and in this particular order:
 
 Order doesn't matter for other ingestors.
 
-#### Github Enterprise
+#### GitHub Enterprise
 
 If you are targeting GitHub Enterprise, you will want to set the `-github-api-uri` and `-github-graphql-uri` parameters, as they default to `https://github.com` style URIs.
 
