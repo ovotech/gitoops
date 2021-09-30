@@ -11,6 +11,8 @@ import (
 
 var (
 	githubToken   = os.Getenv("GITHUB_TOKEN")
+	githubApiURI  = "https://api.github.com"
+	githubGraphQlURI = "https://api.github.com/graphql"
 	neo4jURI      = "neo4j://localhost:7687"
 	neo4jUser     = "neo4j"
 	neo4jPassword = "neo4j" // ignore
@@ -85,7 +87,7 @@ func runTestCase(tc testCase, t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	gh := github.GetGitHub(db, githubToken, organization, session)
+	gh := github.GetGitHub(db, githubApiURI, githubGraphQlURI, githubToken, organization, session)
 	gh.SyncByIngestorNames(ingestors)
 	exitVal := m.Run()
 	os.Exit(exitVal)
