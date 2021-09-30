@@ -77,7 +77,7 @@ This query is broken down to illustrate the relationships GitOops builds up; the
 
 <pre>
 MATCH p=(:User{login:"serain"})-[*..2]->(:Repository)-[:HAS_CI]->(:CircleCIProject)-[:EXPOSES_ENVIRONMENT_VARIABLE]->(v:EnvironmentVariable)
-WHERE v.variable =~ ".*AWS.*SECRET.*"
+WHERE v.name =~ ".*AWS.*SECRET.*"
 RETURN p
 </pre>
 </details>
@@ -126,7 +126,7 @@ WHERE NOT (u)-[:IS_MEMBER_OF]->(:Organization{login:"fakenews"})
 WITH u
 <br>
 MATCH p=(u)-[*..5]->(v:EnvironmentVariable)
-WHERE v.variable =~ "._(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD)._"
+WHERE v.name =~ "._(AUTH|SECRET|TOKEN|PASS|PWD|CRED|KEY|PRD|PROD)._"
 RETURN p
 
 </pre>
