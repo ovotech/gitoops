@@ -14,15 +14,17 @@ type GitHub struct {
 	session    string
 }
 
-func GetGitHub(db *database.Database, token, organization, session string) *GitHub {
+func GetGitHub(db *database.Database, githubApiURI, githubGraphQlURI, token, organization, session string) *GitHub {
 	return &GitHub{
 		gqlclient: &GraphQLClient{
 			client:       &http.Client{},
+			githubGraphQlURI:    githubGraphQlURI,
 			token:        token,
 			organization: organization,
 		},
 		restclient: &RESTClient{
 			client:       &http.Client{},
+			githubApiURI:    githubApiURI,
 			token:        token,
 			organization: organization,
 		},

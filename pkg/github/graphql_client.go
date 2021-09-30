@@ -23,6 +23,7 @@ type GraphQLClient struct {
 	client       *http.Client
 	token        string
 	organization string
+	githubGraphQlURI    string
 }
 
 type GraphQLError struct {
@@ -45,7 +46,7 @@ func (c *GraphQLClient) call(query string, variables map[string]string) []byte {
 
 	req, err := http.NewRequest(
 		"POST",
-		"https://api.github.com/graphql",
+		c.githubGraphQlURI,
 		bytes.NewBuffer(jsonValue),
 	)
 	if err != nil {

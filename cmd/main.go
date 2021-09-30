@@ -13,12 +13,14 @@ import (
 
 var (
 	// Common parameters for all commands
-	debug         bool
-	organization  string
-	neo4jURI      string
-	neo4jUser     string
-	neo4jPassword string
-	session       string
+	debug            bool
+	organization     string
+	neo4jURI         string
+	neo4jUser        string
+	neo4jPassword    string
+	session          string
+	githubApiURI     string
+	githubGraphQlURI string
 
 	githubCmd       = flag.NewFlagSet("github", flag.ExitOnError)
 	githubToken     = githubCmd.String("token", "", "The GitHub access token.")
@@ -108,6 +110,8 @@ func setupCommonFlags() {
 		fs.StringVar(&neo4jURI, "neo4j-uri", "neo4j://localhost:7687", "The Neo4j URI.")
 		fs.StringVar(&neo4jUser, "neo4j-user", "neo4j", "The Neo4j user.")
 		fs.StringVar(&neo4jPassword, "neo4j-password", "", "The Neo4j password.")
+		fs.StringVar(&githubApiURI, "github-api-uri","https://api.github.com", "The target GitHub API URI, defaults to https://api.github.com; Change if targeting Github Enterprise.")
+		fs.StringVar(&githubGraphQlURI, "github-graphql-uri","https://api.github.com/graphql", "The target GitHub GraphQL URI, defaults to https://api.github.com/graphql; Change if targeting Github Enterprise.")
 		fs.StringVar(
 			&session,
 			"session",
