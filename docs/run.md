@@ -78,23 +78,9 @@ The following ingestors need to run first and in this particular order:
 
 Order doesn't matter for other ingestors.
 
-#### GitHub Enterprise
+#### GitHub Enterprise Server
 
-If you are targeting GitHub Enterprise, you will want to set the `-github-api-uri` and `-github-graphql-uri` parameters, as they default to `https://github.com` style URIs.
-
-```
-$ gitoops github                                                    \
-          -debug                                                    \
-          -github-api-uri="https://git.ent.example/api/v3"          \
-          -github-graphql-uri="https://git.ent.example/api/graphql" \
-          -organization fakenews                                    \
-          -neo4j-password $NEO4J_PASSWORD                           \
-          -neo4j-uri="neo4j://localhost:7687"                       \
-          -token $GITHUB_TOKEN                                      \
-          -ingestor default                                         \
-          -ingestor secrets                                         \
-          -session helloworld
-```
+If you are targetting a self-hosted GitHub Enterprise Server, you will want to set the `-github-rest-url` and `-github-graphql-url` parameters. These default to the GitHub cloud URLs.
 
 ### Ingest CircleCI data
 
