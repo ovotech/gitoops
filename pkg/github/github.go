@@ -17,16 +17,16 @@ type GitHub struct {
 func GetGitHub(db *database.Database, githubRESTURL, githubGraphQLURL, token, organization, session string) *GitHub {
 	return &GitHub{
 		gqlclient: &GraphQLClient{
-			client:       &http.Client{},
-			githubGraphQlURI:    githubGraphQlURI,
-			token:        token,
-			organization: organization,
+			client:           &http.Client{},
+			githubGraphQLURL: githubGraphQLURL,
+			token:            token,
+			organization:     organization,
 		},
 		restclient: &RESTClient{
-			client:       &http.Client{},
-			githubApiURI:    githubApiURI,
-			token:        token,
-			organization: organization,
+			client:        &http.Client{},
+			githubRESTURL: githubRESTURL,
+			token:         token,
+			organization:  organization,
 		},
 		db:      db,
 		session: session,
