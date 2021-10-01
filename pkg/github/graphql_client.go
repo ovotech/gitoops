@@ -20,10 +20,10 @@ var (
 )
 
 type GraphQLClient struct {
-	client              *http.Client
-	token               string
-	organization        string
-	githubGraphQLURL    string
+	client           *http.Client
+	token            string
+	organization     string
+	githubGraphQLURL string
 }
 
 type GraphQLError struct {
