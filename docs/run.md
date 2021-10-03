@@ -78,6 +78,10 @@ The following ingestors need to run first and in this particular order:
 
 Order doesn't matter for other ingestors.
 
+#### GitHub Enterprise Server
+
+If you are targetting a self-hosted GitHub Enterprise Server, you will want to set the `-github-rest-url` and `-github-graphql-url` parameters. These default to the GitHub cloud URLs.
+
 ### Ingest CircleCI data
 
 Unfortunately, the documented CircleCI REST API doesn't give everything we want. Luckily there's a "hidden" GraphQL API we can access with a cookie. With your browser, navigate to the CircleCI web UI and fetch your `ring-session` cookie. You should be able to find this in a request to the `graphql-unstable` endpoint when loading some pages.

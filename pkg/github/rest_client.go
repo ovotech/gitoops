@@ -12,9 +12,10 @@ import (
 )
 
 type RESTClient struct {
-	client       *http.Client
-	token        string
-	organization string
+	client        *http.Client
+	token         string
+	organization  string
+	githubRESTURL string
 }
 
 type RESTError struct {
@@ -27,7 +28,7 @@ type RESTError struct {
 func (c *RESTClient) call(resourcePath string, page int) (int, []byte) {
 	log.Debugf("Issuing REST query %s page %d", resourcePath, page)
 
-	u, _ := url.Parse("https://api.github.com")
+	u, _ := url.Parse(c.githubRESTURL)
 	u.Path = path.Join(u.Path, resourcePath)
 	req, err := http.NewRequest(
 		"GET",

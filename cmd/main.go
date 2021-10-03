@@ -20,9 +20,11 @@ var (
 	neo4jPassword string
 	session       string
 
-	githubCmd       = flag.NewFlagSet("github", flag.ExitOnError)
-	githubToken     = githubCmd.String("token", "", "The GitHub access token.")
-	githubIngestors arrayFlags
+	githubCmd        = flag.NewFlagSet("github", flag.ExitOnError)
+	githubToken      = githubCmd.String("token", "", "The GitHub access token.")
+	githubRESTURL    = githubCmd.String("github-rest-url", "https://api.github.com", "The target GitHub API URL.")
+	githubGraphQLURL = githubCmd.String("github-graphql-url", "https://api.github.com/graphql", "The target GitHub GraphQL URL.")
+	githubIngestors  arrayFlags
 
 	circleCICmd    = flag.NewFlagSet("circleci", flag.ExitOnError)
 	circleCICookie = circleCICmd.String(
