@@ -19,3 +19,4 @@ Finally, GitOops will also map webhooks and status checks from commits to a repo
 - [Examples](examples.md)
 - [Schema](schema.md)
 - [Blog post](blog.md)
+- [Slides](slides.pdf)
