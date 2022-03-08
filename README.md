@@ -25,4 +25,4 @@ RETURN p
 
 GitOops takes inspiration from tools like [Bloodhound](https://github.com/BloodHoundAD/BloodHound) and [Cartography](https://github.com/lyft/cartography).
 
-Check out the [docs](docs/README.md) and [more example queries](./docs/examples.md).
+Check out the [docs](docs/README.md), some [more example queries](./docs/examples.md) and our [BSides London talk](https://www.youtube.com/watch?v=Gf0sqqHnHOU).
