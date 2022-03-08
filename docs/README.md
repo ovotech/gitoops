@@ -20,4 +20,4 @@ Finally, GitOops will also map webhooks and status checks from commits to a repo
 - [Schema](schema.md)
 - [Blog post](blog.md)
 - [Slides](slides.pdf)
-- [BSides London](https://www.youtube.com/watch?v=Gf0sqqHnHOU)
+- [BSides London talk](https://www.youtube.com/watch?v=Gf0sqqHnHOU)
