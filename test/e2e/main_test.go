@@ -2,6 +2,7 @@ package e2e
 
 import (
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"testing"
 
@@ -90,5 +91,8 @@ func TestMain(m *testing.M) {
 	gh := github.GetGitHub(db, githubRESTURL, githubGraphQLURL, githubToken, organization, session)
 	gh.SyncByIngestorNames(ingestors)
 	exitVal := m.Run()
+	if err := db.Close(); err != nil {
+		log.Fatal(err)
+	}
 	os.Exit(exitVal)
 }

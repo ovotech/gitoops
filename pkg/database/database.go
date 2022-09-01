@@ -1,12 +1,14 @@
 package database
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
 
 type Database struct {
+	driver  neo4j.Driver
 	session neo4j.Session
 }
 
@@ -35,4 +37,19 @@ func (d *Database) Run(query string, params map[string]interface{}) neo4j.Result
 	}
 
 	return records
+}
+
+func (d *Database) Close() error {
+	sessionErr := d.session.Close()
+	driverErr := d.driver.Close()
+	if driverErr == nil {
+		return sessionErr
+	}
+	if sessionErr == nil {
+		return driverErr
+	}
+	return fmt.Errorf("Both session and driver could not be closed."+
+		"\nsession close failed with: %v"+
+		"\ndriver close failed with: %v\n",
+		sessionErr, driverErr)
 }
