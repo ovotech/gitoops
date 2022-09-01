@@ -10,7 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func cmdCircleCI(cmd *flag.FlagSet) {
+func cmdCircleCI(cmd *flag.FlagSet) *database.Database {
 	// Setup common params and parse command.
 	// We have to do this here because we have a custom flag in the GitHub command.
 	setupCommonFlags()
@@ -25,6 +25,7 @@ func cmdCircleCI(cmd *flag.FlagSet) {
 
 	cci := circleci.GetCircleCI(db, organization, *circleCICookie, session)
 	cci.Sync()
+	return db
 }
 
 func validateCircleCIParams() {

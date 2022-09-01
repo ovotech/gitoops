@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func cmdGitHub(cmd *flag.FlagSet) {
+func cmdGitHub(cmd *flag.FlagSet) *database.Database {
 	setupCommonFlags()
 	// Since we want to support a list this has to be defined here, because Golang's `flag`
 	// sucks (or more likely, I don't understand how to use it)
@@ -43,6 +43,7 @@ func cmdGitHub(cmd *flag.FlagSet) {
 	// Now we can actually call the ingestor
 	gh := github.GetGitHub(db, *githubRESTURL, *githubGraphQLURL, *githubToken, organization, session)
 	gh.SyncByIngestorNames(ingestorNames)
+	return db
 }
 
 func validateGitHubParams() {

@@ -56,13 +56,21 @@ func main() {
 		log.Fatalf("Unknown subcommand '%s', see help for more details.", os.Args[1])
 	}
 
+	var db *database.Database
+	defer func() {
+		if db != nil {
+			if err := db.Close(); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}()
 	switch cmd.Name() {
 
 	case githubCmd.Name():
-		cmdGitHub(cmd)
+		db = cmdGitHub(cmd)
 
 	case circleCICmd.Name():
-		cmdCircleCI(cmd)
+		db = cmdCircleCI(cmd)
 
 	case enrichCmd.Name():
 		setupCommonFlags()
@@ -70,7 +78,7 @@ func main() {
 		validateCommonParams()
 		initLogging()
 
-		db := database.GetDB(neo4jURI, neo4jUser, neo4jPassword)
+		db = database.GetDB(neo4jURI, neo4jUser, neo4jPassword)
 		en := enrich.GetEnricher(db, organization)
 		en.Enrich()
 
