@@ -80,7 +80,7 @@ Order doesn't matter for other ingestors.
 
 #### GitHub Enterprise Server
 
-If you are targetting a self-hosted GitHub Enterprise Server, you will want to set the `-github-rest-url` and `-github-graphql-url` parameters. These default to the GitHub cloud URLs.
+If you are targeting a self-hosted GitHub Enterprise Server, you will want to set the `-github-rest-url` and `-github-graphql-url` parameters. These default to the GitHub cloud URLs.
 
 ### Ingest CircleCI data
 
