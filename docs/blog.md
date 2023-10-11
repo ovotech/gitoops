@@ -149,7 +149,7 @@ RETURN p
 
 ### Attackable Terraform plans
 
-Production Terraform plans on unreviewed code are [a bad idea](https://alex.kaskaso.li/post/terraform-plan-rce). We attempt to find these by looking at the context values on pull requests' status checks, to get maximum coverage and account for CI/CD systems that may be configured server-side (e.g. AWS CodeBuild). The funky regex in this query means "things that contain `terraform` (or `tf`) and `prod` (or `prd`, and as long as it's not preceeded by `non`):
+Production Terraform plans on unreviewed code are [a bad idea](https://alex.kaskaso.li/post/terraform-plan-rce). We attempt to find these by looking at the context values on pull requests' status checks, to get maximum coverage and account for CI/CD systems that may be configured server-side (e.g. AWS CodeBuild). The funky regex in this query means "things that contain `terraform` (or `tf`) and `prod` (or `prd`, and as long as it's not preceded by `non`):
 
 ```
 MATCH (r:Repository)-[:HAS_STATUS_CHECK{pullRequest:TRUE}]->(s:StatusCheck)
